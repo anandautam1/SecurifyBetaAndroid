@@ -1,0 +1,35 @@
+<resources>
+    <!-- VM http://10.0.2.2/ -->
+    <!-- HOME SERVER http://27.32.135.35/Securify/ -->
+    <string name="ServerURI">http://27.32.135.35/Securify/</string>
+
+    <string name="app_name">Securify</string>
+    <string name="LoginActivity_Email">Email</string>
+    <string name="LoginActivity_password">Password</string>
+    <string name="LoginActivity_login">Login</string>
+    <string name="LoginActivity_Quest">Not Signed up ?</string>
+    <string name="LoginActivity_Register">Register</string>
+    <string name="LoginActivity_ForgotPass">Forgotten Password ?</string>
+    <string name="LoginActivity_RecoverPass">Reset</string>
+
+    <string name="RegisterActivity_ConfirmPass">Confirm Password</string>
+    <string name="RegsiterActivity_RoleText">Role</string>
+    <string name="RegsiterActivity_ManagerText">Manager</string>
+    <string name="RegsiterActivity_TechnicianText">Technician</string>
+    <string name="RegsiterActivity_PhoneText">Phone Number</string>
+    <string name="RegsiterActivity_FirstName">First Name</string>
+    <string name="RegsiterActivity_LastName">Last Name</string>
+
+    <string-array name="RoleDropdown">
+        <item>Manager</item>
+        <item>Technican</item>
+    </string-array>
+
+    <!-- StartView Specific -->
+    <string name="action_settings">Settings</string>
+    <string name="action_add_favourite">Add to Favourites</string>
+    <string name="action_play_next">Play Next</string>
+    <string name="backdrop_title">LOVE MUSIC</string>
+    <string name="backdrop_subtitle">This season top 20 albums</string>
+
+</resources>
