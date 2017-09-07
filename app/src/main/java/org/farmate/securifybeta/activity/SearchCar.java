@@ -1,28 +1,26 @@
-package org.farmate.securifybeta;
-
+package org.farmate.securifybeta.activity;
 
 import android.content.res.Resources;
 import android.graphics.Rect;
-import android.os.Bundle;
-
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
-
 import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.util.TypedValue;
 import android.view.View;
-import android.widget.ImageView;
 
-import com.bumptech.glide.Glide;
+import org.farmate.securifybeta.R;
+import org.farmate.securifybeta.other.Album;
+import org.farmate.securifybeta.other.AlbumsAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class StartActivity extends AppCompatActivity {
+public class SearchCar extends AppCompatActivity {
+
 
     private RecyclerView recyclerView;
     private AlbumsAdapter adapter;
@@ -31,9 +29,7 @@ public class StartActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_start);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        setContentView(R.layout.activity_search_car);
 
         initCollapsingToolbar();
 
@@ -96,6 +92,8 @@ public class StartActivity extends AppCompatActivity {
     /**
      * Adding few albums for testing
      */
+
+    // modify to retrieve the list of cars axtuall in the databse
     private void prepareAlbums() {
 
         int[] covers = new int[]{
@@ -191,62 +189,3 @@ public class StartActivity extends AppCompatActivity {
         return Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, r.getDisplayMetrics()));
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/*
-import android.Manifest;
-import android.content.pm.PackageManager;
-import android.support.v4.app.ActivityCompat;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.MapFragment;
-import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
-
-public class StartActivity extends AppCompatActivity {
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_start);
-
-        // element needed will be the current location of the technician or manager
-        // the next element will be the action features such as the main thing
-        // NEED to show the actual detail of the user being logged in and the role assigned to the actual account
-        // NEED to find a open source library for graph
-        // #1
-        // REGISTERING A NEW VEHICLE
-        // #2
-        // REQUEST A TECHNICIAN VIA A SEARCH OR THE MAP VIEW
-        // BEACONS Requests
-        // #3
-        // MONITOR Registered VEHICLE for the manager
-        // OR
-        // MONITOR Job Requested VEHICLE for the mechanics
-
-        // layout detection on phone Vs Tablets probably
-
-    }
-
-    @Override
-    public void onBackPressed() {
-    }
-}
-*/

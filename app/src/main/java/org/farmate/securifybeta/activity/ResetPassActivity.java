@@ -1,4 +1,4 @@
-package org.farmate.securifybeta;
+package org.farmate.securifybeta.activity;
 
 import android.content.Intent;
 import android.net.Uri;
@@ -11,10 +11,11 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.farmate.securifybeta.R;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import static org.farmate.securifybeta.LoginActivity.generalHTTPQuest;
+import static org.farmate.securifybeta.activity.LoginActivity.generalHTTPQuest;
 
 public class ResetPassActivity extends AppCompatActivity {
     public static final String RESET_MESSAGE = "org.farmate.securify.RECOVER";

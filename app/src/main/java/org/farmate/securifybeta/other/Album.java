@@ -1,4 +1,4 @@
-package org.farmate.securifybeta;
+package org.farmate.securifybeta.other;
 
 /**
  * Created by Lincoln on 18/05/16.

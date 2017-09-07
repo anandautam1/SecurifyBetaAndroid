@@ -19,7 +19,7 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyCtZOBQHwG-zGjfB_Fv62qt8n4gn1Zyjh0" />
 
-        <activity android:name=".LoginActivity">
+        <activity android:name=".activity.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -27,29 +27,29 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".RegisterActivity"
-            android:parentActivityName=".LoginActivity">
+            android:name=".activity.RegisterActivity"
+            android:parentActivityName=".activity.LoginActivity">
 
             <!-- The meta-data tag is required if you support API level 15 and lower -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".LoginActivity" />
+                android:value=".activity.LoginActivity" />
         </activity>
         <activity
-            android:name=".ResetPassActivity"
-            android:parentActivityName=".LoginActivity">
+            android:name=".activity.ResetPassActivity"
+            android:parentActivityName=".activity.LoginActivity">
 
             <!-- The meta-data tag is required if you support API level 15 and lower -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".LoginActivity" />
+                android:value=".activity.LoginActivity" />
         </activity>
 
         <!-- Start Activity (in this case shoudl have no action bar). -->
         <activity
-            android:name=".StartActivity"
+            android:name=".activity.StartActivity"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".SearchCar"></activity>
+        <activity android:name=".activity.SearchCar"></activity>
     </application>
 
 </manifest>

@@ -1,4 +1,4 @@
-package org.farmate.securifybeta;
+package org.farmate.securifybeta.other;
 
 /**
  * Created by Ananda on 1/09/2017.
@@ -14,9 +14,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+
+import org.farmate.securifybeta.R;
 
 import java.util.List;
 
