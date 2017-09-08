@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="org.farmate.securify.LoginActivity"
+    tools:context="org.farmate.securifybeta.activity.LoginActivity"
     tools:layout_editor_absoluteY="81dp"
     tools:layout_editor_absoluteX="0dp">
 
@@ -45,7 +45,7 @@
                 tools:layout_editor_absoluteY="109dp" />
 
             <EditText
-                android:id="@+id/inputemail"
+                android:id="@+id/inputCarNickName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -68,7 +68,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentStart="true"
-                android:layout_below="@+id/inputemail"
+                android:layout_below="@+id/inputCarNickName"
                 android:layout_weight="1"
                 android:ems="10"
                 android:hint="@string/LoginActivity_password"
@@ -81,7 +81,7 @@
                 android:id="@+id/loginButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/inputemail"
+                android:layout_below="@+id/inputCarNickName"
                 android:layout_centerHorizontal="true"
                 android:layout_weight="1"
                 android:text="@string/LoginActivity_login"

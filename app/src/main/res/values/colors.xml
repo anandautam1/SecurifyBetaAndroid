@@ -1,11 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimary">#3f51b5</color>
     <color name="colorPrimaryDark">#303f9f</color>
     <color name="colorAccent">#FF4081</color>
 
     <!-- Activty Start Specfic -->
     <color name="viewBg">#f1f5f8</color>
     <color name="album_title">#4c4c4c</color>
+
+    <!-- Camera Specific -->
+    <color name="view_background">#e8ecfa</color>
+    <color name="btn_bg">#277bec</color>
+    <color name="white">#ffffff</color>
+    <color name="txt_font">#4e5572</color>
+    <color name="action_bar">#1f2649</color>
+
+    <!-- Carousel Specific -->
+        <color name="holo_blue_dark">#ff0099cc</color>
+        <color name="view_divider_color">#BABABA</color>
+        <color name="view_divider_color_2">#DADADA</color>
 
 </resources>

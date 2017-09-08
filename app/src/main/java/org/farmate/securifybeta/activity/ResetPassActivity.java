@@ -36,7 +36,7 @@ public class ResetPassActivity extends AppCompatActivity {
         Intent intent = getIntent();
         String message = intent.getStringExtra(LoginActivity.REGISTER_MESSAGE);
 
-        emailField = (TextView) findViewById(R.id.inputemail);
+        emailField = (TextView) findViewById(R.id.inputCarNickName);
         emailField.setText(message);
 
         passMainField = (TextView) findViewById(R.id.inputPassword);
@@ -80,7 +80,7 @@ public class ResetPassActivity extends AppCompatActivity {
         protected String doInBackground(String... urls) {
             // we use the OkHttp library from https://github.com/square/okhttp
             final String uri_target = new String(getString(R.string.ServerURI));
-            final String page_target_salt = new String("reset.php?");
+            final String page_target_salt = new String("userReset.php?");
             // get password salt first generate 7 long random char
 
             // uri request builder

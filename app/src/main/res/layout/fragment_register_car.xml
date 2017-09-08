@@ -1,0 +1,178 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="org.farmate.securifybeta.fragment.RegisterCarFragment">
+
+    <!-- TODO: Update blank fragment layout -->
+
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="@dimen/login_pad_dp">
+
+            <TextView
+                android:id="@+id/MessageCarPicture"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/CarPromptPhoto" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/ImageTakens"
+                    android:layout_width="323dp"
+                    android:layout_height="172dp"
+                    app:srcCompat="@android:drawable/ic_menu_gallery" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.54"
+                    android:orientation="vertical">
+
+                    <android.support.design.widget.FloatingActionButton
+                        android:id="@+id/floatingTakePhoto"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:clickable="true"
+                        app:fabSize="mini"
+                        app:srcCompat="@android:drawable/ic_menu_camera" />
+
+                    <Space
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1" />
+
+                    <android.support.design.widget.FloatingActionButton
+                        android:id="@+id/floatingUploadPhoto"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:clickable="true"
+                        app:fabSize="mini"
+                        app:srcCompat="@android:drawable/ic_menu_upload" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/carNickName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/loginButton"
+                android:layout_alignParentStart="true"
+                android:layout_weight="1"
+                android:hint="@string/LoginActivity_login"
+                android:text="@string/CarNickName"
+                tools:layout_editor_absoluteX="208dp"
+                tools:layout_editor_absoluteY="109dp" />
+
+            <EditText
+                android:id="@+id/inputCarNickName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:ems="10"
+                android:hint="@string/CarNickName"
+                android:inputType="textEmailAddress"
+                android:textColorHint="@color/colorPrimaryDark"
+                tools:layout_editor_absoluteX="8dp"
+                tools:layout_editor_absoluteY="0dp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/inputRegistrationPlate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/RegistrationPlate" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="horizontal">
+
+                <EditText
+                    android:id="@+id/inputFirstName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:ems="10"
+                    android:hint="@string/RegistrationPlate"
+                    android:inputType="textPersonName"
+                    android:textColorHint="@color/colorPrimaryDark" />
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/timeLastServiceText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/loginButton"
+                android:layout_alignParentStart="true"
+                android:layout_weight="1"
+                android:hint="@string/LoginActivity_login"
+                android:text="@string/TimeLastServiced"
+                tools:layout_editor_absoluteX="208dp"
+                tools:layout_editor_absoluteY="109dp" />
+
+            <EditText
+                android:id="@+id/inputLastService"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:ems="10"
+                android:hint="@string/TimeLastServiced"
+                android:inputType="date"
+                android:textColorHint="@color/colorPrimary" />
+
+            <TextView
+                android:id="@+id/descriptionText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/Description" />
+
+            <EditText
+                android:id="@+id/descriptionInput"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1205.85"
+                android:ems="10"
+                android:inputType="textMultiLine" />
+
+            <Button
+                android:id="@+id/registerButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_weight="1"
+                android:text="@string/LoginActivity_Register" />
+
+        </LinearLayout>
+    </ScrollView>
+
+</FrameLayout>

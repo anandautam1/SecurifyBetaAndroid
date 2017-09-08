@@ -1,7 +1,7 @@
 <resources>
     <!-- VM http://10.0.2.2/ -->
     <!-- HOME SERVER http://27.32.135.35/Securify/ -->
-    <string name="ServerURI">http://27.32.135.35/Securify/</string>
+    <string name="ServerURI">http://10.0.2.2/</string>
 
     <string name="app_name">Securify</string>
     <string name="LoginActivity_Email">Email</string>
@@ -61,5 +61,19 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <!-- Register Car Specific -->
+    <string name="CarPromptPhoto">Take Photo Of The Car</string>
+    <string name="CarNickName">Car Nick Name</string>
+    <string name="RegistrationPlate">Registration Plate</string>
+    <string name="TimeLastServiced">Time Last Serviced</string>
+    <string name="Description">Description</string>
+
+    <!-- Take Picture Specific -->
+    <string name="btnTakePicture">Capture Image</string>
+    <string name="btnRecordVideo">Record Video</string>
+    <string name="or">(or)</string>
+    <string name="btnUploadToServer">Upload to Server</string>
+
 
 </resources>

@@ -45,7 +45,7 @@ public class LoginActivity extends AppCompatActivity {
         setTitle("Securify");
         //getActionBar().setIcon(R.mipmap.ic_launcher);
         // define all objects by id
-        emailField = (TextView) findViewById(R.id.inputemail);
+        emailField = (TextView) findViewById(R.id.inputCarNickName);
         // password field
         passwordField = (TextView) findViewById(R.id.inputPassword);
         // register button take to a next intent
@@ -96,7 +96,7 @@ public class LoginActivity extends AppCompatActivity {
             protected String doInBackground(String... urls) {
                 // we use the OkHttp library from https://github.com/square/okhttp
                 final String uri_target= new String(getString(R.string.ServerURI));
-                final String page_target_salt = new String("login.php?");
+                final String page_target_salt = new String("userLogin.php?");
                 // get password salt first
                 // uri request builder
                 Uri buildUrSalt = Uri.parse(uri_target + page_target_salt)

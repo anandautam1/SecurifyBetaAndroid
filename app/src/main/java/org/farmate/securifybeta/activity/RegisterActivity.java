@@ -47,10 +47,10 @@ public class RegisterActivity extends AppCompatActivity {
         Intent intent = getIntent();
         String message = intent.getStringExtra(LoginActivity.REGISTER_MESSAGE);
         // get each pointer to each part of the page
-        emailField = (TextView) findViewById(R.id.inputemail);
+        emailField = (TextView) findViewById(R.id.inputCarNickName);
         emailField.setText(message);
 
-        emailField = (TextView) findViewById(R.id.inputemail);
+        emailField = (TextView) findViewById(R.id.inputCarNickName);
         firstNameField = (TextView) findViewById(R.id.inputFirstName);
         lastNameField = (TextView) findViewById(R.id.inputLastName);
 
@@ -109,7 +109,7 @@ public class RegisterActivity extends AppCompatActivity {
         protected String doInBackground(String... urls) {
             // we use the OkHttp library from https://github.com/square/okhttp
             final String uri_target = new String(getString(R.string.ServerURI));
-            final String page_target_salt = new String("register.php?");
+            final String page_target_salt = new String("userRegister.php?");
             // get password salt first generate 7 long random char
 
             // uri request builder
