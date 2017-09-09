@@ -33,7 +33,7 @@
 
                 <ImageView
                     android:id="@+id/ImageTakens"
-                    android:layout_width="323dp"
+                    android:layout_width="263dp"
                     android:layout_height="172dp"
                     app:srcCompat="@android:drawable/ic_menu_gallery" />
 
@@ -116,7 +116,7 @@
                 android:orientation="horizontal">
 
                 <EditText
-                    android:id="@+id/inputFirstName"
+                    android:id="@+id/inputRegistrationNumber"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -157,7 +157,7 @@
                 android:text="@string/Description" />
 
             <EditText
-                android:id="@+id/descriptionInput"
+                android:id="@+id/inputDescription"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1205.85"
@@ -165,7 +165,7 @@
                 android:inputType="textMultiLine" />
 
             <Button
-                android:id="@+id/registerButton"
+                android:id="@+id/registerCarButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"

@@ -29,7 +29,12 @@ import org.farmate.securifybeta.fragment.HomeFragment;
 import org.farmate.securifybeta.fragment.MoviesFragment;
 import org.farmate.securifybeta.fragment.NotificationsFragment;
 import org.farmate.securifybeta.fragment.PhotosFragment;
+
 import org.farmate.securifybeta.fragment.SettingsFragment;
+
+// Final Fragment
+import org.farmate.securifybeta.fragment.RegisterCarFragment;
+
 import org.farmate.securifybeta.other.CircleTransform;
 
 public class StartActivity extends AppCompatActivity implements
@@ -37,7 +42,10 @@ public class StartActivity extends AppCompatActivity implements
         MoviesFragment.OnFragmentInteractionListener,
         NotificationsFragment.OnFragmentInteractionListener,
         PhotosFragment.OnFragmentInteractionListener,
-        SettingsFragment.OnFragmentInteractionListener {
+        SettingsFragment.OnFragmentInteractionListener,
+        // new fragment for the next activity
+        RegisterCarFragment.OnFragmentInteractionListener
+    {
 
     private NavigationView navigationView;
     private DrawerLayout drawer;
@@ -61,6 +69,9 @@ public class StartActivity extends AppCompatActivity implements
     private static final String TAG_MOVIES = "movies";
     private static final String TAG_NOTIFICATIONS = "notifications";
     private static final String TAG_SETTINGS = "settings";
+
+        // tag for the custom fragment
+        private static final String TAG_REGISTERCAR = "Register Car";
     public static String CURRENT_TAG = TAG_HOME;
 
     // toolbar titles respected to selected nav menu item
@@ -215,11 +226,13 @@ public class StartActivity extends AppCompatActivity implements
                 // notifications fragment
                 NotificationsFragment notificationsFragment = new NotificationsFragment();
                 return notificationsFragment;
-
             case 4:
                 // settings fragment
                 SettingsFragment settingsFragment = new SettingsFragment();
                 return settingsFragment;
+            case 5:
+                RegisterCarFragment registerCarFragment = new RegisterCarFragment();
+                return registerCarFragment;
             default:
                 return new HomeFragment();
         }
@@ -263,6 +276,10 @@ public class StartActivity extends AppCompatActivity implements
                     case R.id.nav_settings:
                         navItemIndex = 4;
                         CURRENT_TAG = TAG_SETTINGS;
+                        break;
+                    case R.id.nav_register_car:
+                        navItemIndex = 5;
+                        CURRENT_TAG = TAG_REGISTERCAR;
                         break;
                     case R.id.nav_about_us:
                         // launch new intent instead of loading fragment

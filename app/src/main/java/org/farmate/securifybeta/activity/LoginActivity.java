@@ -155,7 +155,8 @@ public class LoginActivity extends AppCompatActivity {
                 Toast.makeText(LoginActivity.this,result,Toast.LENGTH_LONG).show();
                 // start new intent
                 if(result.equals("Login Success")) {
-                    Intent intent = new Intent(LoginActivity.this, StartActivity.class);
+                    // switch to the camera temporarily
+                    Intent intent = new Intent(LoginActivity.this, CameraCaptureActivity.class);
                     emailString = emailField.getText().toString();
                     // email input will be passed on by default
                     intent.putExtra(LOGIN_MESSAGE, emailString);
