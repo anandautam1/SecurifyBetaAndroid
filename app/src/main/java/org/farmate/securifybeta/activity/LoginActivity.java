@@ -11,6 +11,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import org.farmate.securifybeta.R;
+import org.farmate.securifybeta.fragment.HomeFragment;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -156,7 +157,7 @@ public class LoginActivity extends AppCompatActivity {
                 // start new intent
                 if(result.equals("Login Success")) {
                     // switch to the camera temporarily
-                    Intent intent = new Intent(LoginActivity.this, CameraCaptureActivity.class);
+                    Intent intent = new Intent(LoginActivity.this, StartActivity.class);
                     emailString = emailField.getText().toString();
                     // email input will be passed on by default
                     intent.putExtra(LOGIN_MESSAGE, emailString);

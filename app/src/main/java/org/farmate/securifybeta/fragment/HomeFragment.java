@@ -35,6 +35,8 @@ import org.farmate.securifybeta.R;
 public class HomeFragment extends Fragment implements OnMapReadyCallback {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+
+    // FIX INTENT
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
@@ -56,7 +58,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
      * @return A new instance of fragment HomeFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static HomeFragment newInstance(String param1, String param2) {
+    public static HomeFragment newInstance(String param1, String param2 ) {
         HomeFragment fragment = new HomeFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
@@ -83,6 +85,8 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+        // on boot get ready to ask on permission for the latest location
+
     }
 
     @Override
@@ -91,7 +95,6 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
         // Inflate the layout for this fragment
         mContext = getActivity();
         return inflater.inflate(R.layout.fragment_home, container, false);
-
     }
 
     @Override

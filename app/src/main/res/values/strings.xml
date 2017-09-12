@@ -1,7 +1,7 @@
 <resources>
     <!-- VM http://10.0.2.2/ -->
     <!-- HOME SERVER http://27.32.135.35/Securify/ -->
-    <string name="ServerURI">http://10.0.2.2/</string>
+    <string name="ServerURI">http://27.32.135.35/Securify/</string>
 
     <string name="app_name">Securify</string>
     <string name="LoginActivity_Email">Email</string>
@@ -22,7 +22,7 @@
 
     <string-array name="RoleDropdown">
         <item>Manager</item>
-        <item>Technican</item>
+        <item>Technician</item>
     </string-array>
 
     <!-- StartView Specific -->
@@ -76,6 +76,6 @@
     <string name="btnRecordVideo">Record Video</string>
     <string name="or">(or)</string>
     <string name="btnUploadToServer">Upload to Server</string>
-
+    <string name="universal_submit">Submit</string>
 
 </resources>

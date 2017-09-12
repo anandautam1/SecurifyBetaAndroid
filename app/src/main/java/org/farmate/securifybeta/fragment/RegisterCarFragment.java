@@ -89,8 +89,7 @@ public class RegisterCarFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
-        FragmentManager fm = getActivity().getSupportFragmentManager();/// getChildFragmentManager();
-
+        FragmentManager mgr = getActivity().getSupportFragmentManager();/// getChildFragmentManager();
     }
 
     static int TAKE_PIC = 1;
@@ -165,15 +164,11 @@ public class RegisterCarFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE) {
             if (resultCode == Activity.RESULT_OK) {
-
                 Bitmap bmp = (Bitmap) data.getExtras().get("data");
                 ByteArrayOutputStream stream = new ByteArrayOutputStream();
-
                 bmp.compress(Bitmap.CompressFormat.PNG, 100, stream);
                 byte[] byteArray = stream.toByteArray();
-
                 // convert byte array to Bitmap
-
                 Bitmap bitmap = BitmapFactory.decodeByteArray(byteArray, 0,
                         byteArray.length);
                 CarPhoto.setImageBitmap(bitmap);
@@ -215,6 +210,7 @@ public class RegisterCarFragment extends Fragment {
      * "http://developer.android.com/training/basics/fragments/communicating.html"
      * >Communicating with Other Fragments</a> for more information.
      */
+
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
@@ -253,7 +249,6 @@ public class RegisterCarFragment extends Fragment {
             } else if (status_result == 1) {
                 return "Registration Success";
             }
-
             return "";
         }
 
