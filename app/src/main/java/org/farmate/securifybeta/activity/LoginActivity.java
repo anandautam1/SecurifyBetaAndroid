@@ -11,7 +11,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import org.farmate.securifybeta.R;
-import org.farmate.securifybeta.fragment.HomeFragment;
 import org.json.JSONException;
 import org.json.JSONObject;
 

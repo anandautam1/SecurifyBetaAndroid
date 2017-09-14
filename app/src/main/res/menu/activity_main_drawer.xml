@@ -2,44 +2,44 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <group android:checkableBehavior="single">
+
         <item
             android:id="@+id/nav_home"
             android:icon="@drawable/ic_dots"
             android:title="@string/nav_home" />
         <item
-            android:id="@+id/nav_photos"
-            android:icon="@drawable/ic_dots"
-            android:title="@string/nav_photos" />
-        <item
-            android:id="@+id/nav_movies"
-            android:icon="@drawable/ic_dots"
-            android:title="@string/nav_movies" />
-
-        <item
             android:id="@+id/nav_notifications"
             android:icon="@drawable/ic_dots"
             android:title="@string/nav_notifications" />
+        <item
+            android:id="@+id/nav_request_tech"
+            android:icon="@drawable/ic_dots"
+            android:title="@string/nav_request_tech" />
+        <item
+            android:id="@+id/nav_monitor_car"
+            android:icon="@drawable/ic_dots"
+            android:title="@string/nav_monitor_car" />
+
+        <item
+            android:id="@+id/nav_register_car"
+            android:icon="@drawable/ic_dots"
+            android:title="@string/nav_register_car" />
 
         <item
             android:id="@+id/nav_settings"
             android:icon="@drawable/ic_dots"
             android:title="@string/nav_settings" />
 
-        <item
-            android:id="@+id/nav_register_car"
-            android:icon="@drawable/ic_dots"
-            android:title="Register Car" />
-
     </group>
 
     <item android:title="Other">
         <menu>
             <item
-                android:id="@+id/nav_about_us"
-                android:title="@string/nav_about_us" />
+                android:id="@+id/nav_reset_pass"
+                android:title="@string/nav_reset_pass" />
             <item
-                android:id="@+id/nav_privacy_policy"
-                android:title="@string/privacy_policy" />
+                android:id="@+id/nav_logout"
+                android:title="@string/nav_logout" />
         </menu>
     </item>
 
