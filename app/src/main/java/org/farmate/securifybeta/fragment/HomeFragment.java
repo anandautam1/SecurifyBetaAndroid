@@ -12,10 +12,14 @@ import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+
+import com.bumptech.glide.Glide;
 
 import org.farmate.securifybeta.R;
 import org.farmate.securifybeta.other.Album;
@@ -86,18 +90,18 @@ public class HomeFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         this.inflatedView = inflater.inflate(R.layout.fragment_home, container, false);
-        /*
+
         initCollapsingToolbar();
         recyclerView = (RecyclerView) inflatedView.findViewById(R.id.recycler_view);
+
         albumList = new ArrayList<>();
-        adapter = new AlbumsAdapter(getActivity(), albumList);
+        adapter = new AlbumsAdapter(getActivity().getApplicationContext(), albumList);
         // declare activity to fragment interaction
-        RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(getActivity(), 2);
+        RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(getActivity().getApplicationContext(), 2);
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.addItemDecoration(new GridSpacingItemDecoration(2, dpToPx(10), true));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(adapter);
-        */
 
         prepareAlbums();
         return inflater.inflate(R.layout.fragment_home, container, false);
@@ -152,7 +156,7 @@ public class HomeFragment extends Fragment {
         Album a = new Album("True Romance", 13, covers[0]);
         albumList.add(a);
 
-        a = new Album("Xscpae", 8, covers[1]);
+        a = new Album("Xscape", 8, covers[1]);
         albumList.add(a);
 
         a = new Album("Maroon 5", 11, covers[2]);

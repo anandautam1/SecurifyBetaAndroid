@@ -11,6 +11,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import org.farmate.securifybeta.R;
+import org.farmate.securifybeta.database.securifyUserDatabaseHelper;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -38,8 +39,13 @@ public class LoginActivity extends AppCompatActivity {
     private String emailString;
     private String passwordString;
 
+    private securifyUserDatabaseHelper mDbHelper;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        mDbHelper = new securifyUserDatabaseHelper(getApplicationContext());
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         setTitle("Securify");

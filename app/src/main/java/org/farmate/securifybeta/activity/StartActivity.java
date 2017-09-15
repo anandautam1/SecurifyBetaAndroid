@@ -1,8 +1,11 @@
 package org.farmate.securifybeta.activity;
 
 import android.Manifest;
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -40,6 +43,16 @@ import org.farmate.securifybeta.fragment.SettingsFragment;
 import org.farmate.securifybeta.fragment.RegisterCarFragment;
 
 import org.farmate.securifybeta.other.CircleTransform;
+import org.farmate.securifybeta.database.usersLocal;
+import org.farmate.securifybeta.database.securifyUserDatabaseHelper;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.farmate.securifybeta.activity.LoginActivity.generalHTTPQuest;
 
 public class StartActivity extends AppCompatActivity implements
         HomeFragment.OnFragmentInteractionListener,
@@ -57,6 +70,8 @@ public class StartActivity extends AppCompatActivity implements
     private ImageView imgNavHeaderBg, imgProfile;
     private TextView txtName, txtWebsite;
     private Toolbar toolbar;
+
+    private ProgressDialog progressDialog;
 
     // urls to load navigation header background image
     private static final String urlNavHeaderBg = "https://api.androidhive.info/images/nav-menu-header-bg.jpg";
@@ -85,9 +100,18 @@ public class StartActivity extends AppCompatActivity implements
         private static final int MY_PERMISSIONS_REQUEST_COARSE_LOCATION =2 ;
         private static final int MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE = 3;
 
+        private securifyUserDatabaseHelper db;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // new instance of the database and the ONLY INSTANCE
+        db = new securifyUserDatabaseHelper(getApplicationContext());
+        // synchronize with the server
+        StoreJSonDataInToSQLiteClass asyncTask = new StoreJSonDataInToSQLiteClass(getApplicationContext());
+        asyncTask.execute(new String[] {getString(R.string.ServerURI)});
+
         setContentView(R.layout.activity_start);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -455,5 +479,102 @@ public class StartActivity extends AppCompatActivity implements
     public void onFragmentInteraction(Uri uri) {
 
     }
+
+        private class StoreJSonDataInToSQLiteClass extends AsyncTask<String, Void, String> {
+
+            public Context context;
+            public StoreJSonDataInToSQLiteClass(Context context) {
+
+                this.context = context;
+            }
+
+            @Override
+            protected void onPreExecute() {
+
+                super.onPreExecute();
+
+                progressDialog = new ProgressDialog(StartActivity.this);
+                progressDialog.setTitle("LOADING");
+                progressDialog.setMessage("Please Wait");
+                progressDialog.show();
+
+            }
+
+            @Override
+            protected String doInBackground(String... urls) {
+
+                    // we use the OkHttp library from https://github.com/square/okhttp
+                    final String uri_target= new String(getString(R.string.ServerURI));
+                    final String page_target_salt = new String("getAllUser.php?");
+                    // get password salt first
+                    // uri request builder
+                    Uri buildUrSalt = Uri.parse(uri_target + page_target_salt);
+                    String result = generalHTTPQuest(buildUrSalt.toString());
+                    int status_result = -1;
+                    try {
+                        JSONArray jsonArray = null;
+                        jsonArray = new JSONArray(result);
+                        JSONObject jsonObject;
+                        for (int i = 0; i < jsonArray.length(); i++) {
+
+                            usersLocal userLocal = new usersLocal();
+                            jsonObject = jsonArray.getJSONObject(i);
+
+                            final String COLUMN_USERID = "userID";
+                            final String COLUMN_FNAME = "fname";
+                            final String COLUMN_LNAME = "lname";
+                            final String COLUMN_EMAIL = "email";
+                            final String COLUMN_PHONE = "phone";
+                            final String COLUMN_PASS_HASHED = "pass_hashed";
+                            final String COLUMN_PASS_SALT = "pass_salt";
+                            final String COLUMN_ROLE = "role";
+                            final String COLUMN_GPS_LONG = "gps_long";
+                            final String COLUMN_GPS_LATI = "gps_lati";
+                            final String COLUMN_ISONLINE = "isOnline";
+                            final String COLUMN_LASTUPDATED = "lastUpdated";
+
+                            // debug only
+                            //String temp = new String(jsonObject.getString(COLUMN_USERID));
+                            //int tempInt = Integer.parseInt(temp);
+
+                            userLocal.setUserID(Integer.parseInt(jsonObject.getString(COLUMN_USERID)));
+                            userLocal.setFname(jsonObject.getString(COLUMN_FNAME));
+                            userLocal.setLname(jsonObject.getString(COLUMN_LNAME));
+                            userLocal.setEmail(jsonObject.getString(COLUMN_EMAIL));
+                            userLocal.setPhone(jsonObject.getString(COLUMN_PHONE));
+                            userLocal.setPass_hashed(jsonObject.getString(COLUMN_PASS_HASHED));
+                            userLocal.setPass_salt(jsonObject.getString(COLUMN_PASS_SALT));
+                            userLocal.setRole(jsonObject.getString(COLUMN_ROLE));
+                            userLocal.setGps_long(Double.parseDouble(jsonObject.getString(COLUMN_GPS_LONG)));
+                            userLocal.setGps_lati(Double.parseDouble(jsonObject.getString(COLUMN_GPS_LATI)));
+                            userLocal.setIsOnline(Integer.parseInt(jsonObject.getString(COLUMN_ISONLINE)));
+                            userLocal.setLastUpdated(jsonObject.getString(COLUMN_LASTUPDATED));
+                            db.addUser(userLocal);
+                        }
+                        status_result = 1;
+                        db.closeDB();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    if (status_result == -1) {
+                        return "Cannot Connect To The Server";
+                    }
+                    else if(status_result == 0) {
+                        return "Query Error";
+                    }
+                    else {
+                        return "Database Synchronized";
+                    }
+            }
+
+            @Override
+            protected void onPostExecute(String result)
+            {
+                progressDialog.dismiss();
+                Toast.makeText(StartActivity.this,result, Toast.LENGTH_LONG).show();
+            }
+        }
+
+    // initialize the local sqlite database
 }
 

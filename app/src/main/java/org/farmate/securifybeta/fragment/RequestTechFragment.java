@@ -3,11 +3,13 @@ package org.farmate.securifybeta.fragment;
 import android.Manifest;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.location.Location;
 import android.location.LocationListener;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.StrictMode;
@@ -40,6 +42,12 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import org.farmate.securifybeta.R;
+import org.farmate.securifybeta.activity.LoginActivity;
+import org.farmate.securifybeta.activity.StartActivity;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import static org.farmate.securifybeta.activity.LoginActivity.generalHTTPQuest;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -293,6 +301,11 @@ public class RequestTechFragment extends Fragment implements OnMapReadyCallback,
         }
     }
 
+    private String currentLat;
+    private String currentLong;
+    private String userID;
+    private String isOnline;
+
     @Override
     public void onLocationChanged(Location location)
     {
@@ -309,8 +322,23 @@ public class RequestTechFragment extends Fragment implements OnMapReadyCallback,
         markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA));
         mCurrLocationMarker = mMap.addMarker(markerOptions);
 
-        //move map camera
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng,11));
+        // PERFORM HTTP REQUEST
+        // get the numerical value of the current location
+        Double currentLatiDoub = latLng.latitude;
+        currentLat = currentLatiDoub.toString();
+
+        Double currentLongDoub = latLng.longitude;
+        currentLong = currentLongDoub.toString();
+        // move map camera
+        // no need to zoom in every time new location has been detected
+        // instead http request needed to be made on the server
+        userID = "1";
+        isOnline = "1";
+
+        SERVERUpdateCurrentLocation asyncTask = new SERVERUpdateCurrentLocation();
+        asyncTask.execute(new String[] {getString(R.string.ServerURI)});
+
+        // mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng,11));
     }
 
     @Override
@@ -345,5 +373,52 @@ public class RequestTechFragment extends Fragment implements OnMapReadyCallback,
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
+    }
+
+
+    // Async syntax AsyncTask <TypeOfVarArgParams, ProgressValue, ResultValue>
+    private class SERVERUpdateCurrentLocation extends AsyncTask<String, Void, String> {
+        @Override
+        protected String doInBackground(String... urls) {
+            // we use the OkHttp library from https://github.com/square/okhttp
+            final String uri_target = new String(getString(R.string.ServerURI));
+            final String page_target_salt = new String("updateUserLocation.php?");
+            // get password salt first generate 7 long random char
+
+            // uri request builder
+            Uri buildUrSalt = Uri.parse(uri_target + page_target_salt)
+                    .buildUpon()
+                    .appendQueryParameter("userID", userID)
+                    .appendQueryParameter("currentLat", currentLat)
+                    .appendQueryParameter("currentLong", currentLong)
+                    .appendQueryParameter("isOnline", isOnline)
+                    .build();
+            String result = generalHTTPQuest(buildUrSalt.toString());
+            int status_result = -1;
+            try {
+                JSONObject reader = new JSONObject(result);
+                status_result = reader.getInt("success");
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            if (status_result == -1) {
+                return "Cannot Connect To The Server";
+            } else if (status_result == 0) {
+                return "Invalid ID Register";
+            } else if (status_result == 1) {
+                return "Update Success";
+            }
+            return "";
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            Toast.makeText(getActivity(),result,Toast.LENGTH_LONG).show();
+            // start new intent
+            if(result.equals("Update Success")) {
+
+            }
+        }
+
     }
 }
