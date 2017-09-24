@@ -3,6 +3,8 @@
     <!-- HOME SERVER http://27.32.135.35/Securify/ -->
     <string name="ServerURI">http://27.32.135.35/Securify/</string>
 
+    <string name="jobActivity_Ex">jobActivity/</string>
+
     <string name="app_name">Securify</string>
     <string name="LoginActivity_Email">Email</string>
     <string name="LoginActivity_password">Password</string>
@@ -19,6 +21,14 @@
     <string name="RegsiterActivity_PhoneText">Phone Number</string>
     <string name="RegsiterActivity_FirstName">First Name</string>
     <string name="RegsiterActivity_LastName">Last Name</string>
+
+    <string name="RequestActivity_Home">Request Technician</string>
+
+    <string name="RequestTechnicianNAME">Name</string>
+    <string name="RequestTechnicianESTIMATION">ETA</string>
+
+    <string name="RequestPOPUP_Confirm">Confirm</string>
+    <string name="RequestPOPUP_Decline">Decline</string>
 
     <string-array name="RoleDropdown">
         <item>Manager</item>
@@ -78,5 +88,23 @@
     <string name="or">(or)</string>
     <string name="btnUploadToServer">Upload to Server</string>
     <string name="universal_submit">Submit</string>
+
+    <!--
+    <string name="userEmailLoggedIn"/>
+    <string name="userIdLoggedIn" />
+    <string name="userFnameLoggedIn" />
+    <string name="userLnameLoggedIn" />
+    <string name="phoneLoggedIn" />
+    <string name="passHashedLoggedIn" />
+    <string name="passRoleLoggedIn" />
+    -->
+
+    <string name="userEmailLoggedIn" > userEmailLoggedIn </string>
+    <string name="userIdLoggedIn" > userIdLoggedIn </string>
+    <string name="userFnameLoggedIn" > userFnameLoggedIn </string>
+    <string name="userLnameLoggedIn" > userLnameLoggedIn </string>
+    <string name="phoneLoggedIn" > phoneLoggedIn </string>
+    <string name="passHashedLoggedIn" > passHashedLoggedIn</string>
+    <string name="passRoleLoggedIn" > passRoleLoggedIn</string>
 
 </resources>

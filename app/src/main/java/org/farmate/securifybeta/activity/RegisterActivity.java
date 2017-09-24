@@ -121,6 +121,9 @@ public class RegisterActivity extends AppCompatActivity {
                     .appendQueryParameter("role", roleString)
                     .appendQueryParameter("phoneNumber", phoneNumberString)
                     .appendQueryParameter("password", passwordString)
+                    .appendQueryParameter("password", passwordString)
+                    .appendQueryParameter("password", passwordString)
+                    .appendQueryParameter("password", passwordString)
                     .build();
             String result = generalHTTPQuest(buildUrSalt.toString());
             int status_result = -1;

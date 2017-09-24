@@ -1,6 +1,7 @@
 package org.farmate.securifybeta.activity;
 
 import android.content.Intent;
+import android.graphics.PorterDuff;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -58,6 +59,9 @@ public class LoginActivity extends AppCompatActivity {
         registerButton = (Button) findViewById(R.id.registerButton);
         // login button take to a next intent
         loginButton = (Button) findViewById(R.id.loginButton);
+
+        //loginButton.getBackground().setColorFilter(0xFF00FF00, PorterDuff.Mode.MULTIPLY);
+
         // http result example
         // httpResults = (TextView) findViewById(R.id.httpResult);
         resetButton = (Button) findViewById(R.id.resetButton);
@@ -161,8 +165,9 @@ public class LoginActivity extends AppCompatActivity {
                 Toast.makeText(LoginActivity.this,result,Toast.LENGTH_LONG).show();
                 // start new intent
                 if(result.equals("Login Success")) {
-                    // switch to the camera temporarily
-                    Intent intent = new Intent(LoginActivity.this, StartActivity.class);
+                    // switch to firebase temporarily
+                    //Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                     Intent intent = new Intent(LoginActivity.this, StartActivity.class);
                     emailString = emailField.getText().toString();
                     // email input will be passed on by default
                     intent.putExtra(LOGIN_MESSAGE, emailString);

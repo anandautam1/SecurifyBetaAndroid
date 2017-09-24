@@ -3,6 +3,7 @@ package org.farmate.securifybeta.activity;
 import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -42,6 +43,7 @@ import org.farmate.securifybeta.fragment.SettingsFragment;
 // Final Fragment
 import org.farmate.securifybeta.fragment.RegisterCarFragment;
 
+import org.farmate.securifybeta.fragment.dialogRequestFragment;
 import org.farmate.securifybeta.other.CircleTransform;
 import org.farmate.securifybeta.database.usersLocal;
 import org.farmate.securifybeta.database.securifyUserDatabaseHelper;
@@ -60,9 +62,13 @@ public class StartActivity extends AppCompatActivity implements
         RequestTechFragment.OnFragmentInteractionListener,
         MonitorCarFragment.OnFragmentInteractionListener,
         RegisterCarFragment.OnFragmentInteractionListener,
-        SettingsFragment.OnFragmentInteractionListener
+        SettingsFragment.OnFragmentInteractionListener,
+        dialogRequestFragment.OnFragmentInteractionListener
         // new fragment for the next activity
     {
+        // get preferences based on the logged in database
+
+        public static final String LOGIN_MESSAGE = "org.farmate.securify.LOGIN";
 
     private NavigationView navigationView;
     private DrawerLayout drawer;
@@ -169,8 +175,7 @@ public class StartActivity extends AppCompatActivity implements
             navItemIndex = 0;
             CURRENT_TAG = TAG_HOME;
             loadHomeFragment();
-             }
-
+            }
         }
         // handle all the permissions on the access
         @Override
@@ -441,15 +446,12 @@ public class StartActivity extends AppCompatActivity implements
         if (navItemIndex == 0) {
             getMenuInflater().inflate(R.menu.main, menu);
         }
-
         // when fragment is notifications, load the menu created for notifications
         if (navItemIndex == 3) {
             getMenuInflater().inflate(R.menu.notifications, menu);
         }
         return true;
     }
-
-
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -483,6 +485,20 @@ public class StartActivity extends AppCompatActivity implements
         private class StoreJSonDataInToSQLiteClass extends AsyncTask<String, Void, String> {
 
             public Context context;
+
+            final String COLUMN_USERID = "userID";
+            final String COLUMN_FNAME = "fname";
+            final String COLUMN_LNAME = "lname";
+            final String COLUMN_EMAIL = "email";
+            final String COLUMN_PHONE = "phone";
+            final String COLUMN_PASS_HASHED = "pass_hashed";
+            final String COLUMN_PASS_SALT = "pass_salt";
+            final String COLUMN_ROLE = "role";
+            final String COLUMN_GPS_LONG = "gps_long";
+            final String COLUMN_GPS_LATI = "gps_lati";
+            final String COLUMN_ISONLINE = "isOnline";
+            final String COLUMN_LASTUPDATED = "lastUpdated";
+
             public StoreJSonDataInToSQLiteClass(Context context) {
 
                 this.context = context;
@@ -490,14 +506,11 @@ public class StartActivity extends AppCompatActivity implements
 
             @Override
             protected void onPreExecute() {
-
                 super.onPreExecute();
-
                 progressDialog = new ProgressDialog(StartActivity.this);
                 progressDialog.setTitle("LOADING");
                 progressDialog.setMessage("Please Wait");
                 progressDialog.show();
-
             }
 
             @Override
@@ -511,6 +524,9 @@ public class StartActivity extends AppCompatActivity implements
                     Uri buildUrSalt = Uri.parse(uri_target + page_target_salt);
                     String result = generalHTTPQuest(buildUrSalt.toString());
                     int status_result = -1;
+
+                    Bundle bundleFromPrev = getIntent().getExtras();
+
                     try {
                         JSONArray jsonArray = null;
                         jsonArray = new JSONArray(result);
@@ -519,19 +535,6 @@ public class StartActivity extends AppCompatActivity implements
 
                             usersLocal userLocal = new usersLocal();
                             jsonObject = jsonArray.getJSONObject(i);
-
-                            final String COLUMN_USERID = "userID";
-                            final String COLUMN_FNAME = "fname";
-                            final String COLUMN_LNAME = "lname";
-                            final String COLUMN_EMAIL = "email";
-                            final String COLUMN_PHONE = "phone";
-                            final String COLUMN_PASS_HASHED = "pass_hashed";
-                            final String COLUMN_PASS_SALT = "pass_salt";
-                            final String COLUMN_ROLE = "role";
-                            final String COLUMN_GPS_LONG = "gps_long";
-                            final String COLUMN_GPS_LATI = "gps_lati";
-                            final String COLUMN_ISONLINE = "isOnline";
-                            final String COLUMN_LASTUPDATED = "lastUpdated";
 
                             // debug only
                             //String temp = new String(jsonObject.getString(COLUMN_USERID));
@@ -568,10 +571,52 @@ public class StartActivity extends AppCompatActivity implements
             }
 
             @Override
-            protected void onPostExecute(String result)
-            {
+            protected void onPostExecute(String result) {
                 progressDialog.dismiss();
-                Toast.makeText(StartActivity.this,result, Toast.LENGTH_LONG).show();
+                // update preference based on the passed email address
+                // inside fragment thus
+                if (result.equals("Database Synchronized")) {
+
+                    SharedPreferences sharedPref = getPreferences(Context.MODE_PRIVATE);
+                    //SharedPreferences sharedPref = getSharedPreferences(Context.MODE_PRIVATE);
+                    SharedPreferences.Editor editor = sharedPref.edit();
+                    // get the email string passed to the start activity
+                    Bundle bundleFromPrev = getIntent().getExtras();
+                    // app wouldnt crash if the
+                    String emailFromApp = bundleFromPrev.getString(LOGIN_MESSAGE, "");
+                    // get USER ID based on the input email
+                    if (!emailFromApp.equals("")) {
+                        List<usersLocal> userList = new ArrayList<usersLocal>();
+                        userList = db.getUserOnEmail(emailFromApp);
+                        for (int i = 0; i < userList.size(); i++) {
+
+                            usersLocal user = userList.get(i);
+                            String userIdFromDB = String.valueOf(user.getUserID());
+                            String fNameFromDB = user.getFname();
+                            String lNameFromDB = user.getLname();
+                            String phoneFromDB = user.getPhone();
+                            String passHashedFromDB = user.getPass_hashed();
+                            String roleFromDB = user.getRole();
+
+                            editor.putString(getString(R.string.userEmailLoggedIn), emailFromApp);
+                            //editor.commit();
+                            editor.putString(getString(R.string.userIdLoggedIn), userIdFromDB);
+                            //editor.commit();
+                            editor.putString(getString(R.string.userFnameLoggedIn), fNameFromDB);
+                            //editor.commit();
+                            editor.putString(getString(R.string.userLnameLoggedIn), lNameFromDB);
+                            //editor.commit();
+                            editor.putString(getString(R.string.phoneLoggedIn), phoneFromDB);
+                            //editor.commit();
+                            editor.putString(getString(R.string.passHashedLoggedIn), passHashedFromDB);
+                            //editor.commit();
+                            editor.putString(getString(R.string.passRoleLoggedIn), roleFromDB);
+                            editor.apply();
+                        }
+                    }
+                    Toast.makeText(StartActivity.this, result, Toast.LENGTH_LONG).show();
+                    loadHomeFragment();
+                }
             }
         }
 

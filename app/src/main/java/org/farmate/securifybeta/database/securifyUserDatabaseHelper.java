@@ -125,8 +125,7 @@ public class securifyUserDatabaseHelper extends SQLiteOpenHelper {
                 COLUMN_LASTUPDATED
         };
         // sorting orders
-        String sortOrder =
-                COLUMN_USERID + " ASC";
+        String sortOrder = COLUMN_USERID + " ASC";
         List<usersLocal> userList = new ArrayList<usersLocal>();
 
         SQLiteDatabase db = this.getReadableDatabase();
@@ -149,7 +148,9 @@ public class securifyUserDatabaseHelper extends SQLiteOpenHelper {
         // Traversing through all rows and adding to list
         if (cursor.moveToFirst()) {
             do {
+                // new instance of a userLocal
                 usersLocal userLocal = new usersLocal();
+
                 userLocal.setUserID(Integer.parseInt(cursor.getString(cursor.getColumnIndex(COLUMN_USERID))));
                 userLocal.setFname(cursor.getString(cursor.getColumnIndex(COLUMN_FNAME)));
                 userLocal.setLname(cursor.getString(cursor.getColumnIndex(COLUMN_LNAME)));
@@ -171,6 +172,130 @@ public class securifyUserDatabaseHelper extends SQLiteOpenHelper {
 
         // return usersLocal list
         return userList;
+    }
+
+    public List<usersLocal> getUserOnEmail(String email) {
+        // email stirng will be the first argument within the query
+
+        // array of columns to fetch
+        String[] columns = {
+                COLUMN_USERID,
+                COLUMN_FNAME,
+                COLUMN_LNAME,
+                COLUMN_PHONE,
+                COLUMN_PASS_HASHED,
+                COLUMN_ROLE
+        };
+
+        String[] like = {
+                email
+        };
+        // sorting orders
+        String sortOrder = COLUMN_USERID + " ASC";
+        List<usersLocal> userList = new ArrayList<usersLocal>();
+
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        String selection = COLUMN_EMAIL + " = ?";
+
+        // query the usersLocal table
+        /**
+         * Here query function is used to fetch records from usersLocal table this function works like we use sql query.
+         * SQL query equivalent to this query function is
+         * SELECT user_id,user_name,user_email,user_password FROM usersLocal ORDER BY user_name;
+         */
+        Cursor cursor = db.query(TABLE_USER, //Table to query
+                columns,                    //columns to return
+                selection,                  //columns for the WHERE clause
+                like,              //The values for the WHERE clause
+                null,                       //group the rows
+                null,                      //filter by row groups
+                sortOrder);
+
+        // Traversing through all rows and adding to list
+        if (cursor.moveToFirst()) {
+            do {
+                // new instance of a userLocal
+                usersLocal userLocal = new usersLocal();
+                userLocal.setUserID(Integer.parseInt(cursor.getString(cursor.getColumnIndex(COLUMN_USERID))));
+                userLocal.setFname(cursor.getString(cursor.getColumnIndex(COLUMN_FNAME)));
+                userLocal.setLname(cursor.getString(cursor.getColumnIndex(COLUMN_LNAME)));
+                userLocal.setPhone(cursor.getString(cursor.getColumnIndex(COLUMN_PHONE)));
+                userLocal.setPass_hashed(cursor.getString(cursor.getColumnIndex(COLUMN_PASS_HASHED)));
+                userLocal.setRole(cursor.getString(cursor.getColumnIndex(COLUMN_ROLE)));
+
+                // Adding usersLocal record to list
+                userList.add(userLocal);
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        db.close();
+        // return usersLocal list
+        return userList;
+
+    }
+
+    public List<usersLocal> getUserOnUserID(int userID) {
+        // email stirng will be the first argument within the query
+
+        // array of columns to fetch
+        String[] columns = {
+                COLUMN_USERID,
+                COLUMN_FNAME,
+                COLUMN_LNAME,
+                COLUMN_PHONE,
+                COLUMN_PASS_HASHED,
+                COLUMN_ROLE
+        };
+
+        String userIDString = String.valueOf(userID);
+
+        String[] like = {
+                userIDString
+        };
+        // sorting orders
+        String sortOrder = COLUMN_USERID + " ASC";
+        List<usersLocal> userList = new ArrayList<usersLocal>();
+
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        String selection = COLUMN_EMAIL + " = ?";
+
+        // query the usersLocal table
+        /**
+         * Here query function is used to fetch records from usersLocal table this function works like we use sql query.
+         * SQL query equivalent to this query function is
+         * SELECT user_id,user_name,user_email,user_password FROM usersLocal ORDER BY user_name;
+         */
+        Cursor cursor = db.query(TABLE_USER, //Table to query
+                columns,                    //columns to return
+                selection,                  //columns for the WHERE clause
+                like,              //The values for the WHERE clause
+                null,                       //group the rows
+                null,                      //filter by row groups
+                sortOrder);
+
+        // Traversing through all rows and adding to list
+        if (cursor.moveToFirst()) {
+            do {
+                // new instance of a userLocal
+                usersLocal userLocal = new usersLocal();
+                userLocal.setUserID(Integer.parseInt(cursor.getString(cursor.getColumnIndex(COLUMN_USERID))));
+                userLocal.setFname(cursor.getString(cursor.getColumnIndex(COLUMN_FNAME)));
+                userLocal.setLname(cursor.getString(cursor.getColumnIndex(COLUMN_LNAME)));
+                userLocal.setPhone(cursor.getString(cursor.getColumnIndex(COLUMN_PHONE)));
+                userLocal.setPass_hashed(cursor.getString(cursor.getColumnIndex(COLUMN_PASS_HASHED)));
+                userLocal.setRole(cursor.getString(cursor.getColumnIndex(COLUMN_ROLE)));
+
+                // Adding usersLocal record to list
+                userList.add(userLocal);
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        db.close();
+        // return usersLocal list
+        return userList;
+
     }
 
     /**
@@ -221,7 +346,6 @@ public class securifyUserDatabaseHelper extends SQLiteOpenHelper {
      * @return true/false
      */
     public boolean checkUser(String email) {
-
         // array of columns to fetch
         String[] columns = {
                 COLUMN_USERID

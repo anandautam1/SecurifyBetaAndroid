@@ -1,7 +1,6 @@
 package org.farmate.securifybeta.fragment;
 
 import android.Manifest;
-import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -15,7 +14,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
@@ -32,27 +30,16 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.google.android.gms.maps.SupportMapFragment;
-
 import org.farmate.securifybeta.R;
-import org.farmate.securifybeta.activity.CameraCaptureActivity;
-import org.farmate.securifybeta.activity.LoginActivity;
-import org.farmate.securifybeta.activity.RegisterActivity;
-import org.farmate.securifybeta.activity.StartActivity;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-import static android.R.attr.data;
-import static android.R.attr.start;
 import static android.app.Activity.RESULT_OK;
 import static org.farmate.securifybeta.activity.LoginActivity.generalHTTPQuest;
 
