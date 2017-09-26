@@ -154,6 +154,7 @@ public class RequestTechFragment extends Fragment {
                 R.drawable.album10,
                 R.drawable.album11};
 
+        // change to the name of the technician
         Album a = new Album("True Romance", 13, covers[0]);
         albumList.add(a);
 
@@ -185,7 +186,6 @@ public class RequestTechFragment extends Fragment {
         albumList.add(a);
 
         adapter.notifyDataSetChanged();
-
     }
 
     /**

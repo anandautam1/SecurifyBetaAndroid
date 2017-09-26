@@ -2,6 +2,7 @@
     <!-- VM http://10.0.2.2/ -->
     <!-- HOME SERVER http://27.32.135.35/Securify/ -->
     <string name="ServerURI">http://27.32.135.35/Securify/</string>
+    <string name="googleAPICredetialServer">AIzaSyBs1XJE34XAi6oy4x-1EkI4-fBOtBnTzAM</string>
 
     <string name="jobActivity_Ex">jobActivity/</string>
 
@@ -45,7 +46,7 @@
     <!-- Navigation Drawer specific -->
     <string name="nav_home">Home</string>
     <string name="nav_notifications">Notifications</string>
-    <string name="nav_request_tech">Request Technician</string>
+    <string name="nav_monitor_tech">Monitor Technician</string>
     <string name="nav_monitor_car">Monitor Car</string>
     <string name="nav_register_car">Register Car</string>
     <string name="nav_settings">Settings</string>
@@ -58,8 +59,7 @@
     <!-- Toolbar titles when navigation menu item is selected -->
     <string-array name="nav_item_activity_titles">
         <item>Home</item>
-        <item>Notifications</item>
-        <item>Request</item>
+        <item>Monitor Tech Fragment</item>
         <item>Monitor Car</item>
         <item>Register Car</item>
         <item>Settings</item>
@@ -99,12 +99,12 @@
     <string name="passRoleLoggedIn" />
     -->
 
-    <string name="userEmailLoggedIn" > userEmailLoggedIn </string>
-    <string name="userIdLoggedIn" > userIdLoggedIn </string>
-    <string name="userFnameLoggedIn" > userFnameLoggedIn </string>
-    <string name="userLnameLoggedIn" > userLnameLoggedIn </string>
-    <string name="phoneLoggedIn" > phoneLoggedIn </string>
-    <string name="passHashedLoggedIn" > passHashedLoggedIn</string>
-    <string name="passRoleLoggedIn" > passRoleLoggedIn</string>
+    <string name="userEmailLoggedIn"> userEmailLoggedIn </string>
+    <string name="userIdLoggedIn"> userIdLoggedIn </string>
+    <string name="userFnameLoggedIn"> userFnameLoggedIn </string>
+    <string name="userLnameLoggedIn"> userLnameLoggedIn </string>
+    <string name="phoneLoggedIn"> phoneLoggedIn </string>
+    <string name="passHashedLoggedIn"> passHashedLoggedIn</string>
+    <string name="passRoleLoggedIn"> passRoleLoggedIn</string>
 
 </resources>

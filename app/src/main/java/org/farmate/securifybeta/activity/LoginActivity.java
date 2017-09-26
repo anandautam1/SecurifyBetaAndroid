@@ -224,8 +224,6 @@ public class LoginActivity extends AppCompatActivity {
         }
 }
 
-;
-
 
 
     // get the register button to assign to the next register activity

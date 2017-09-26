@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-
     <group android:checkableBehavior="single">
-
         <item
             android:id="@+id/nav_home"
             android:icon="@drawable/ic_dots"
@@ -12,31 +10,25 @@
             android:icon="@drawable/ic_dots"
             android:title="@string/nav_notifications" />
         <item
-            android:id="@+id/nav_request_tech"
+            android:id="@+id/nav_monitor_tech"
             android:icon="@drawable/ic_dots"
-            android:title="@string/nav_request_tech" />
+            android:title="@string/nav_monitor_tech" />
         <item
             android:id="@+id/nav_monitor_car"
             android:icon="@drawable/ic_dots"
             android:title="@string/nav_monitor_car" />
-
         <item
             android:id="@+id/nav_register_car"
             android:icon="@drawable/ic_dots"
             android:title="@string/nav_register_car" />
-
         <item
             android:id="@+id/nav_settings"
             android:icon="@drawable/ic_dots"
             android:title="@string/nav_settings" />
-
     </group>
 
     <item android:title="Other">
         <menu>
-            <item
-                android:id="@+id/nav_reset_pass"
-                android:title="@string/nav_reset_pass" />
             <item
                 android:id="@+id/nav_logout"
                 android:title="@string/nav_logout" />

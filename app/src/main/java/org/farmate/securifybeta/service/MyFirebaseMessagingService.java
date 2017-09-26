@@ -13,6 +13,7 @@ import android.util.Log;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
+import org.farmate.securifybeta.activity.StartActivity;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -71,6 +72,19 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         }
     }
 
+    private final String ARG_PARAM_NAME = "Name_key";
+    private final String ARG_ETA = "ETA_key";
+    private final String ARG_PHONE = "Phone_Key";
+    private final String ARG_LATI1 = "LATI_1_key";
+    private final String ARG_LONG1 = "LONG_1_key";
+    private final String ARG_LATI2 = "LATI_2_key";
+    private final String ARG_LONG2 = "LONG_2_key";
+    private final String IS_CONFIRMED = "CONFIRMATION_STATUS";
+    private final String CLIENT_FIREBASE_ID = "CLIENT_FIREBASE";
+    private final String CLIENT_USER_ID = "CLIENT_USERID";
+    private final String TECHNI_FIREBASE_ID = "TECHNI_FIREBASE";
+    private final String TECHNI_USER_ID = "TECHNI_USERID";
+
     private void handleDataMessage(JSONObject json) {
         Log.e(TAG, "push json: " + json.toString());
 
@@ -82,10 +96,30 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             boolean isBackground = data.getBoolean("is_background");
             String imageUrl = data.getString("image");
             String timestamp = data.getString("timestamp");
-
             JSONObject payload = data.getJSONObject("payload");
-            String notifLati = data.getString("lati");
-            String notifLong = data.getString("long");
+
+            // get the payload parameter from the json.
+            String Name_key = payload.getString(ARG_PARAM_NAME);
+            String ETA_key = payload.getString(ARG_ETA);
+            String Arg_phone = payload.getString(ARG_PHONE);
+
+            // get the string payload
+            String Client_Firebase_ID = payload.getString(CLIENT_FIREBASE_ID);
+            String Client_User_ID = payload.getString(CLIENT_USER_ID);
+            String Arg_lati1 = payload.getString(ARG_LATI1);
+            String Arg_long1 = payload.getString(ARG_LONG1);
+            // based on the confirmation
+            String Is_Confirmed = payload.getString(IS_CONFIRMED);
+            String Techni_Firebase_ID = "";
+            String Techni_User_ID = "";
+            String Arg_lati2 = "";
+            String Arg_long2 = "";
+            if(IS_CONFIRMED.equals("1")) {
+                Techni_Firebase_ID = payload.getString(TECHNI_FIREBASE_ID);
+                Techni_User_ID = payload.getString(TECHNI_USER_ID);
+                Arg_lati2 = payload.getString(ARG_LATI2);
+                Arg_long2 = payload.getString(ARG_LONG2);
+            }
 
             Log.e(TAG, "title: " + title);
             Log.e(TAG, "message: " + message);
@@ -93,7 +127,15 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             Log.e(TAG, "payload: " + payload.toString());
             Log.e(TAG, "imageUrl: " + imageUrl);
             Log.e(TAG, "timestamp: " + timestamp);
+            // payload specific
 
+            Log.e(TAG, ARG_PARAM_NAME + Name_key);
+            Log.e(TAG, ARG_ETA + ETA_key);
+            Log.e(TAG, ARG_PHONE + Arg_phone);
+            Log.e(TAG, ARG_LATI1 + Arg_lati1);
+            Log.e(TAG, ARG_LONG1 + Arg_long1);
+            Log.e(TAG, ARG_LATI2 + Arg_lati2);
+            Log.e(TAG, ARG_LONG2 + Arg_long2);
 
             if (!NotificationUtils.isAppIsInBackground(getApplicationContext())) {
                 // app is in foreground, broadcast the push message
@@ -101,8 +143,22 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
                 pushNotification.putExtra("message", message);
                 pushNotification.putExtra("image", imageUrl);
-                pushNotification.putExtra("lati", notifLati);
-                pushNotification.putExtra("long", notifLong);
+
+                pushNotification.putExtra(ARG_PARAM_NAME , Name_key);
+                pushNotification.putExtra(ARG_ETA , ETA_key);
+                pushNotification.putExtra(ARG_PHONE , Arg_phone);
+
+                // by default if is_confimed is null that means that the tecnifirebasae_ID will be zero
+                pushNotification.putExtra(IS_CONFIRMED, Is_Confirmed);
+                pushNotification.putExtra(CLIENT_FIREBASE_ID, Client_Firebase_ID);
+                pushNotification.putExtra(CLIENT_USER_ID, Client_User_ID);
+                pushNotification.putExtra(ARG_LATI1 , Arg_lati1);
+                pushNotification.putExtra(ARG_LONG1 , Arg_long1);
+                // argument on 2
+                pushNotification.putExtra(TECHNI_FIREBASE_ID, Techni_Firebase_ID);
+                pushNotification.putExtra(CLIENT_USER_ID, Techni_User_ID);
+                pushNotification.putExtra(ARG_LATI2 , Arg_lati2);
+                pushNotification.putExtra(ARG_LONG2 , Arg_long2);
 
                 LocalBroadcastManager.getInstance(this).sendBroadcast(pushNotification);
 
@@ -111,11 +167,17 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 notificationUtils.playNotificationSound();
             } else {
                 // app is in background, show the notification in notification tray
-                Intent resultIntent = new Intent(getApplicationContext(), MainActivity.class);
+                Intent resultIntent = new Intent(getApplicationContext(), StartActivity.class);
                 resultIntent.putExtra("message", message);
                 resultIntent.putExtra("image", imageUrl);
-                resultIntent.putExtra("lati", notifLati);
-                resultIntent.putExtra("long", notifLong);
+
+                resultIntent.putExtra(ARG_PARAM_NAME , Name_key);
+                resultIntent.putExtra(ARG_ETA , ETA_key);
+                resultIntent.putExtra(ARG_PHONE , Arg_phone);
+                resultIntent.putExtra(ARG_LATI1 , Arg_lati1);
+                resultIntent.putExtra(ARG_LONG1 , Arg_long1);
+                resultIntent.putExtra(ARG_LATI2 , Arg_lati2);
+                resultIntent.putExtra(ARG_LONG2 , Arg_long2);
                 // check for image attachment
                 if (TextUtils.isEmpty(imageUrl)) {
                     showNotificationMessage(getApplicationContext(), title, message, timestamp, resultIntent);
