@@ -24,6 +24,7 @@ import com.google.android.gms.maps.SupportMapFragment;
 
 import org.farmate.securifybeta.R;
 import org.farmate.securifybeta.activity.LoginActivity;
+import org.w3c.dom.Text;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -42,21 +43,35 @@ public class dialogRequestFragment extends DialogFragment implements OnMapReadyC
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
+    // for the dialog
     private final String ARG_PARAM_NAME = "Name_key";
     private final String ARG_ETA = "ETA_key";
+    private final String ARG_DISTANCE = "Distance_key";
     private final String ARG_PHONE = "Phone_Key";
-    private final String ARG_LATI1 = "LATI_1_key";
-    private final String ARG_LONG1 = "LONG_1_key";
-    private final String ARG_LATI2 = "LATI_2_key";
-    private final String ARG_LONG2 = "LONG_2_key";
+    private final String ARG_LATI1_CLIENT = "LATI_1_key";
+    private final String ARG_LONG1_CLIENT = "LONG_1_key";
+    private final String ARG_LATI2_TECHNI = "LATI_2_key";
+    private final String ARG_LONG2_TECHNI = "LONG_2_key";
+    private final String ARG_IS_CONFIRMED = "CONFIRMATION_STATUS";
+    private final String ARG_CLIENT_FIREBASE_ID = "CLIENT_FIREBASE";
+    private final String ARG_CLIENT_USER_ID = "CLIENT_USERID";
+    private final String ARG_TECHNI_FIREBASE_ID = "TECHNI_FIREBASE";
+    private final String ARG_TECHNI_USER_ID = "TECHNI_USERID";
 
     private String PARAM_NAME;
     private String ETA;
+    private String DISTANCE;
     private String PHONE;
-    private String LATI1;
-    private String LONG1;
-    private String LATI2;
-    private String LONG2;
+    private String LATI1_CLIENT;
+    private String LONG1_CLIENT;
+    private String LATI2_TECHNI;
+    private String LONG2_TECHNI;
+    private String IS_CONFIRMED;
+    private String CLIENT_FIREBASE_ID;
+    private String CLIENT_USER_ID;
+    private String TECHNI_FIREBASE_ID;
+    private String TECHNI_USER_ID;
+
 
     private View inflatedView;
 
@@ -87,19 +102,27 @@ public class dialogRequestFragment extends DialogFragment implements OnMapReadyC
         if (mArgs != null) {
             PARAM_NAME = mArgs.getString(ARG_PARAM_NAME);
             ETA = mArgs.getString(ARG_ETA);
+            DISTANCE = mArgs.getString(ARG_DISTANCE);
             PHONE = mArgs.getString(ARG_PHONE);
-            LATI1 = mArgs.getString(ARG_LATI1);
-            LONG1 = mArgs.getString(ARG_LONG1);
-            LATI2 = mArgs.getString(ARG_LATI2);
-            LONG2 = mArgs.getString(ARG_LONG2);
+            LATI1_CLIENT = mArgs.getString(ARG_LATI1_CLIENT);
+            LONG1_CLIENT = mArgs.getString(ARG_LONG1_CLIENT);
+            LATI2_TECHNI = mArgs.getString(ARG_LATI2_TECHNI);
+            LONG2_TECHNI = mArgs.getString(ARG_LONG2_TECHNI);
+            IS_CONFIRMED = mArgs.getString(ARG_IS_CONFIRMED);
+            CLIENT_FIREBASE_ID = mArgs.getString(ARG_CLIENT_FIREBASE_ID);
+            CLIENT_USER_ID = mArgs.getString(ARG_CLIENT_USER_ID);
+            TECHNI_FIREBASE_ID = mArgs.getString(ARG_TECHNI_FIREBASE_ID);
+            TECHNI_USER_ID = mArgs.getString(ARG_TECHNI_USER_ID);
         }
     }
 
     private SupportMapFragment supportMapFragment;
     private Button AcceptButton;
     private Button DeclineButton;
+
     private TextView FullNameTech_status;
     private TextView ETA_status;
+    private TextView Distance_status;
     private TextView PhoneNumber_Status;
 
     @Override
@@ -112,6 +135,9 @@ public class dialogRequestFragment extends DialogFragment implements OnMapReadyC
         ETA_status = (TextView) inflatedView.findViewById(R.id.Estimation);
         ETA_status.setText(ETA);
 
+        Distance_status = (TextView) inflatedView.findViewById(R.id.Distance);
+        ETA_status.setText(ETA);
+
         PhoneNumber_Status = (TextView) inflatedView.findViewById(R.id.PhoneNumber);
         PhoneNumber_Status.setText(PHONE);
 
@@ -121,6 +147,7 @@ public class dialogRequestFragment extends DialogFragment implements OnMapReadyC
             public void onClick(View view) {
                 //
                 //dismiss();
+                // send async to the server
             }
             });
         DeclineButton = (Button) inflatedView.findViewById(R.id.buttonDeclineRequest);
@@ -141,7 +168,6 @@ public class dialogRequestFragment extends DialogFragment implements OnMapReadyC
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-
         super.onActivityCreated(savedInstanceState);
         // by default the map has to be reinstated all the time to ensure up to date location
         initializeMap();

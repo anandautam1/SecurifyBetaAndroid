@@ -37,7 +37,7 @@
                     android:layout_alignParentStart="false"
                     android:layout_alignParentTop="true"
                     android:layout_centerInParent="true"
-                    android:backgroundTint="@android:color/black"
+                    android:backgroundTint="@color/common_google_signin_btn_text_light_pressed"
                     android:elevation="24dp"
                     android:onClick="startActivity"
                     android:text="@string/RequestActivity_Home"
@@ -58,8 +58,8 @@
 
                         <ImageView
                             android:id="@+id/securifyLogo"
-                            android:layout_width="70dp"
-                            android:layout_height="70dp"
+                            android:layout_width="80dp"
+                            android:layout_height="80dp"
                             android:background="@color/colorPrimary"
                             android:cropToPadding="true"
                             app:srcCompat="@mipmap/securify_logo" />
@@ -73,7 +73,7 @@
                                 android:id="@+id/statusETA"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:background="@android:color/black"
+                                android:background="@color/common_google_signin_btn_text_light_pressed"
                                 android:paddingBottom="@dimen/card_margin"
                                 android:paddingLeft="@dimen/album_title_padding"
                                 android:paddingRight="@dimen/album_title_padding"
@@ -83,15 +83,15 @@
                                 android:textSize="18sp" />
 
                             <TextView
-                                android:id="@+id/qualityStatus"
+                                android:id="@+id/distanceETA"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:background="@android:color/black"
+                                android:background="@color/common_google_signin_btn_text_dark_focused"
                                 android:paddingBottom="@dimen/card_margin"
                                 android:paddingLeft="@dimen/album_title_padding"
                                 android:paddingRight="@dimen/album_title_padding"
                                 android:paddingTop="@dimen/card_margin"
-                                android:text="Status: Busy"
+                                android:text="ETA Distance: XXX km"
                                 android:textColor="@color/cardview_light_background" />
 
                         </LinearLayout>

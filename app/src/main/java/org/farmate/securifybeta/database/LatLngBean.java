@@ -9,7 +9,8 @@ public class LatLngBean
     private String Title="";
     private String Snippet="";
     private String Latitude="";
-    private String  Longitude="";
+    private String Longitude="";
+    private int IsOnline=0;
 
     public String getTitle() {
         return Title;
@@ -35,6 +36,6 @@ public class LatLngBean
     public void setLongitude(String longitude) {
         Longitude = longitude;
     }
-
-
+    public int getIsOnline(){return IsOnline;}
+    public void setIsOnline(int isonline) {IsOnline = isonline;}
 }

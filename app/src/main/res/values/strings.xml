@@ -106,5 +106,6 @@
     <string name="phoneLoggedIn"> phoneLoggedIn </string>
     <string name="passHashedLoggedIn"> passHashedLoggedIn</string>
     <string name="passRoleLoggedIn"> passRoleLoggedIn</string>
+    <string name="RequestTechnicianDistance">Distance</string>
 
 </resources>

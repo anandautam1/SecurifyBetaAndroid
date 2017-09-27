@@ -84,6 +84,7 @@ import org.farmate.securifybeta.other.AlbumsAdapter;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -132,7 +133,7 @@ public class HomeFragment extends Fragment implements GoogleApiClient.Connection
     private Context global_context_database;
     private SharedPreferences sharedPref;
 
-    HashMap<Marker,LatLngBean> hashMapMarker = new HashMap<Marker,LatLngBean>();
+    HashMap<Marker, LatLngBean> hashMapMarker = new HashMap<Marker, LatLngBean>();
 
     public HomeFragment() {
         // Required empty public constructor
@@ -160,7 +161,7 @@ public class HomeFragment extends Fragment implements GoogleApiClient.Connection
                 if (getActivity() != null) {
                     sharedPref = getActivity().getPreferences(Context.MODE_PRIVATE);
                     String userID = sharedPref.getString(getString(R.string.userIdLoggedIn), "");
-                    // userID then firebase ID
+                    // userID then firebase ID // checked worked
                     SendFireBaseID asyncTask = new SendFireBaseID(userID, regId);
                     asyncTask.execute(new String[]{getString(R.string.ServerURI)});
                 } else {
@@ -172,7 +173,7 @@ public class HomeFragment extends Fragment implements GoogleApiClient.Connection
 
 
     // TODO: Rename and change types and number of parameters
-    public static HomeFragment newInstance(String param1, String param2 ) {
+    public static HomeFragment newInstance(String param1, String param2) {
         HomeFragment fragment = new HomeFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
@@ -184,16 +185,17 @@ public class HomeFragment extends Fragment implements GoogleApiClient.Connection
     // for the dialog
     private final String ARG_PARAM_NAME = "Name_key";
     private final String ARG_ETA = "ETA_key";
+    private final String ARG_DISTANCE = "Distance_key";
     private final String ARG_PHONE = "Phone_Key";
-    private final String ARG_LATI1 = "LATI_1_key";
-    private final String ARG_LONG1 = "LONG_1_key";
-    private final String ARG_LATI2 = "LATI_2_key";
-    private final String ARG_LONG2 = "LONG_2_key";
-    private final String IS_CONFIRMED = "CONFIRMATION_STATUS";
-    private final String CLIENT_FIREBASE_ID = "CLIENT_FIREBASE";
-    private final String CLIENT_USER_ID = "CLIENT_USERID";
-    private final String TECHNI_FIREBASE_ID = "TECHNI_FIREBASE";
-    private final String TECHNI_USER_ID = "TECHNI_USERID";
+    private final String ARG_LATI1_CLIENT = "LATI_1_key";
+    private final String ARG_LONG1_CLIENT = "LONG_1_key";
+    private final String ARG_LATI2_TECHNI = "LATI_2_key";
+    private final String ARG_LONG2_TECHNI = "LONG_2_key";
+    private final String ARG_IS_CONFIRMED = "CONFIRMATION_STATUS";
+    private final String ARG_CLIENT_FIREBASE_ID = "CLIENT_FIREBASE";
+    private final String ARG_CLIENT_USER_ID = "CLIENT_USERID";
+    private final String ARG_TECHNI_FIREBASE_ID = "TECHNI_FIREBASE";
+    private final String ARG_TECHNI_USER_ID = "TECHNI_USERID";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -219,42 +221,40 @@ public class HomeFragment extends Fragment implements GoogleApiClient.Connection
                     String Name_key = intent.getStringExtra(ARG_PARAM_NAME);
                     String ETA_key = intent.getStringExtra(ARG_ETA);
                     String Arg_phone = intent.getStringExtra(ARG_PHONE);
-                    String Arg_lati1 = intent.getStringExtra(ARG_LATI1);
-                    String Arg_long1 = intent.getStringExtra(ARG_LONG1);
-                    String Client_Firebase_ID = intent.getStringExtra(CLIENT_FIREBASE_ID);
-                    String Is_Confirmed = intent.getStringExtra(IS_CONFIRMED);
+                    String Arg_lati1 = intent.getStringExtra(ARG_LATI1_CLIENT);
+                    String Arg_long1 = intent.getStringExtra(ARG_LONG1_CLIENT);
+                    String Client_Firebase_ID = intent.getStringExtra(ARG_CLIENT_FIREBASE_ID);
+                    String Is_Confirmed = intent.getStringExtra(ARG_IS_CONFIRMED);
 
-                    String Techni_Firebase_ID = intent.getStringExtra(TECHNI_FIREBASE_ID);
-                    String Techni_User_ID = intent.getStringExtra(TECHNI_USER_ID);
-                    String Arg_lati2 = intent.getStringExtra(ARG_LATI2);
-                    String Arg_long2 = intent.getStringExtra(ARG_LONG2);
+                    String Techni_Firebase_ID = intent.getStringExtra(ARG_TECHNI_FIREBASE_ID);
+                    String Techni_User_ID = intent.getStringExtra(ARG_TECHNI_USER_ID);
+                    String Arg_lati2 = intent.getStringExtra(ARG_LATI2_TECHNI);
+                    String Arg_long2 = intent.getStringExtra(ARG_LONG2_TECHNI);
 
                     Bundle args = new Bundle();
                     args.putString(ARG_PARAM_NAME, Name_key);
                     args.putString(ARG_ETA, ETA_key);
                     args.putString(ARG_PHONE, Arg_phone);
-                    args.putString(ARG_LATI1,Arg_lati1);
-                    args.putString(ARG_LONG1,Arg_long1);
-                    args.putString(IS_CONFIRMED,Is_Confirmed);
+                    args.putString(ARG_LATI1_CLIENT, Arg_lati1);
+                    args.putString(ARG_LONG1_CLIENT, Arg_long1);
+                    args.putString(ARG_IS_CONFIRMED, Is_Confirmed);
                     // check if it has been confirmed properly then show the client firebase ID
-                    if(Is_Confirmed.equals("1")) {
-                        args.putString(CLIENT_FIREBASE_ID, Techni_Firebase_ID);
-                        args.putString(CLIENT_USER_ID, Techni_User_ID);
-                        args.putString(ARG_LATI2, Arg_lati2);
-                        args.putString(ARG_LONG2, Arg_long2);
-                    }
-                    else
-                    {
-                        args.putString(CLIENT_FIREBASE_ID, "");
-                        args.putString(CLIENT_USER_ID, "");
-                        args.putString(ARG_LATI2, "");
-                        args.putString(ARG_LONG2, "");
+                    if (Is_Confirmed.equals("1")) {
+                        args.putString(ARG_CLIENT_FIREBASE_ID, Techni_Firebase_ID);
+                        args.putString(ARG_CLIENT_USER_ID, Techni_User_ID);
+                        args.putString(ARG_LATI2_TECHNI, Arg_lati2);
+                        args.putString(ARG_LONG2_TECHNI, Arg_long2);
+                    } else {
+                        args.putString(ARG_CLIENT_FIREBASE_ID, "");
+                        args.putString(ARG_CLIENT_USER_ID, "");
+                        args.putString(ARG_LATI2_TECHNI, "");
+                        args.putString(ARG_LONG2_TECHNI, "");
                     }
                     // open up dialog by passing all the JSON
                     FragmentManager fragmentManager = getChildFragmentManager();
                     dialogRequestFragment requestPopUp = new dialogRequestFragment();
                     requestPopUp.setArguments(args);
-                    requestPopUp.show(fragmentManager,"sam");
+                    requestPopUp.show(fragmentManager, "sam");
                 }
             }
         };
@@ -267,7 +267,7 @@ public class HomeFragment extends Fragment implements GoogleApiClient.Connection
     public void onResume() {
 
         // register GCM registration complete receiver
-        if(getActivity()!= null) {
+        if (getActivity() != null) {
             LocalBroadcastManager.getInstance(getActivity().getApplicationContext()).registerReceiver(mRegistrationBroadcastReceiver,
                     new IntentFilter(Config.REGISTRATION_COMPLETE));
 
@@ -279,30 +279,31 @@ public class HomeFragment extends Fragment implements GoogleApiClient.Connection
 
         super.onResume();
     }
+
     @Override
     public void onPause() {
 
-        if(getActivity() != null) {
+        if (getActivity() != null) {
             LocalBroadcastManager.getInstance(getActivity().getApplicationContext()).unregisterReceiver(mRegistrationBroadcastReceiver);
         }
 
         super.onPause();
         // would like to keep the registration broacast running
     }
+
     @Override
-    public void onDestroy()
-    {
+    public void onDestroy() {
         super.onDestroy();
     }
+
     @Override
-    public void onLowMemory()
-    {
+    public void onLowMemory() {
         super.onLowMemory();
     }
 
     private void initializeMap() {
         // old code using fragment inside fragment does not work once switch from one frag to another
-        if(getActivity()!= null) {
+        if (getActivity() != null) {
             FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
             supportMapFragment = (SupportMapFragment) fragmentManager.findFragmentById(R.id.map_container);
             // if it has not been created before thus execute to make a fresh batch of fragment
@@ -313,6 +314,10 @@ public class HomeFragment extends Fragment implements GoogleApiClient.Connection
     }
 
     private Button RequestButton;
+    private TextView StatusETA;
+    private TextView DistanceETA;
+    // private TextView QualityStatus;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -320,54 +325,248 @@ public class HomeFragment extends Fragment implements GoogleApiClient.Connection
         this.inflatedView = inflater.inflate(R.layout.fragment_home, container, false);
 
         RequestButton = (Button) inflatedView.findViewById(R.id.requestButton);
+        StatusETA = (TextView) inflatedView.findViewById(R.id.statusETA);
+        DistanceETA = (TextView) inflatedView.findViewById(R.id.distanceETA);
+
         RequestButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 // check out all the markers to view all services
 
-                int userID = 0;
+                int TechUserID = 0;
                 SetZoomlevel(listLatLng);
                 // estimate who will be the closest based on the local database sync
-                userID = closestTechnician();
-                if(userID != -1)
-                {
+                TechUserID = closestTechnician();
+                if (TechUserID == -1 || TechUserID == 0) {
+                    Toast.makeText(getActivity(), "Error Finding Users", Toast.LENGTH_LONG).show();
                     return;
+                } else if (getActivity() != null) {
+                    sharedPref = getActivity().getPreferences(Context.MODE_PRIVATE);
+                    int userID = Integer.valueOf(sharedPref.getString(getString(R.string.userIdLoggedIn), ""));
+                    if (getActivity() != null) {
+                        securifyUserDatabaseHelper db = new securifyUserDatabaseHelper(getActivity());
+
+                        List<usersLocal> UserList = db.getUserOnUserID(userID);
+                        usersLocal ChosenUser = new usersLocal();
+                        for (int i = 0; i < UserList.size(); i++) {
+                            ChosenUser = UserList.get(i);
+                        }
+
+                        List<usersLocal> Clientlist = db.getUserOnUserID(TechUserID);
+                        usersLocal ChosenTech = new usersLocal();
+                        for (int i = 0; i < Clientlist.size(); i++) {
+                            ChosenTech = Clientlist.get(i);
+                        }
+                        // calculate ETA from the current location and the next location
+                        // create ASYNC with two of the user as a user list and divided them out within the task
+                        ArrayList<usersLocal> sendList = new ArrayList<usersLocal>();
+                        sendList.add(ChosenUser);
+                        sendList.add(ChosenTech);
+                        getDistanceGoogleDialog AsyncTask = new getDistanceGoogleDialog(sendList);
+                        // calculate ETA from the current location and the next location
+                        // send async on request
+                        // at the end of async request create dialog
+                        // for the dialog
+                        AsyncTask.execute(new String[]{getString(R.string.ServerURI)});
+                    }
                 }
-
-                // calculate ETA from the current location and the next location
-
-                // send async on request
-
-                // at the end of async request create dialog
-
-                // for the dialog
-
-                /*
-                args.putString(ARG_PARAM_NAME, "Djoko Prijantono");
-                args.putString(ARG_ETA, "5 Minutes");
-                args.putString(ARG_PHONE, "0409890566");
-                args.putString(ARG_LATI1,"-37.809682");
-                args.putString(ARG_LONG1,"144.971095");
-                args.putString(ARG_LATI2,"-37.870940");
-                args.putString(ARG_LONG2,"144.707988");
-                */
-                // open up dialog by passing all the JSON
-                /*
-                FragmentManager fragmentManager = getChildFragmentManager();
-                dialogRequestFragment requestPopUp = new dialogRequestFragment();
-                requestPopUp.setArguments(args);
-                requestPopUp.show(fragmentManager,"sam");
-                */
-                // initialize the dialog to draw the path from the current position to the destination
-
-                // confirm change the state of the google maps fragment
-
-                // decline goes back to change to the initial fragment state
             }
+            // calculate ETA from the current location and the next location
+            // send async on request
+            // at the end of async request create dialog
+            // for the dialog
         });
 
-        return inflatedView;
+        // get closest technician
+        int TechUserID = closestTechnician();
+        if (TechUserID == -1 || TechUserID == 0) {
+            Toast.makeText(getActivity(), "Error Finding Users", Toast.LENGTH_LONG).show();
+        } else if (getActivity() != null) {
+            sharedPref = getActivity().getPreferences(Context.MODE_PRIVATE);
+            int userID = Integer.valueOf(sharedPref.getString(getString(R.string.userIdLoggedIn), ""));
+            if (getActivity() != null) {
+                securifyUserDatabaseHelper db = new securifyUserDatabaseHelper(getActivity());
+
+                List<usersLocal> UserList = db.getUserOnUserID(userID);
+                usersLocal ChosenUser = new usersLocal();
+                for (int i = 0; i < UserList.size(); i++) {
+                    ChosenUser = UserList.get(i);
+                }
+
+                List<usersLocal> Clientlist = db.getUserOnUserID(TechUserID);
+                usersLocal ChosenTech = new usersLocal();
+                for (int i = 0; i < Clientlist.size(); i++) {
+                    ChosenTech = Clientlist.get(i);
+                }
+                // calculate ETA from the current location and the next location
+                // create ASYNC with two of the user as a user list and divided them out within the task
+                ArrayList<usersLocal> sendList = new ArrayList<usersLocal>();
+                sendList.add(ChosenUser);
+                sendList.add(ChosenTech);
+                getDistanceGoogleHUD AsyncTask = new getDistanceGoogleHUD(sendList);
+                // calculate ETA from the current location and the next location
+                // send async on request
+                // at the end of async request create dialog
+                // for the dialog
+                AsyncTask.execute(new String[]{getString(R.string.ServerURI)});
+                // update the ETA field everytime
+            }
+        }
+
+        return this.inflatedView;
     }
+
+    // get the distance matrix API
+    //https://maps.googleapis.com/maps/api/distancematrix/json?origins=54.406505,18.67708&destinations=54.446251,18.570993
+    //&mode=driving&language=en-EN&sensor=false&key=AIzaSyBs1XJE34XAi6oy4x-1EkI4-fBOtBnTzAM
+    public String distanceMakeURL(double sourcelat, double sourcelog, double destlat, double destlog) {
+        StringBuilder urlString = new StringBuilder();
+        urlString.append("https://maps.googleapis.com/maps/api/distancematrix/json");
+        urlString.append("?origins=");// from
+        urlString.append(Double.toString(sourcelat));
+        urlString.append(",");
+        urlString.append(Double.toString(sourcelog));
+        urlString.append("&destinations=");// to
+        urlString.append(Double.toString(destlat));
+        urlString.append(",");
+        urlString.append(Double.toString(destlog));
+        urlString.append("&mode=driving&language=en-EN&sensor=false");
+        urlString.append("&key=" + getString(R.string.googleAPICredetialServer));
+        return urlString.toString();
+    }
+
+    //                                                         // post return type // doInBackground return type
+    private class getDistanceGoogleDialog extends AsyncTask<String, String, String> {
+        private ArrayList<usersLocal> chosenUsers = new ArrayList<usersLocal>();
+        private usersLocal chosenClient;
+        private usersLocal chosenTechnician;
+        private double SourceLat;
+        private double SourceLog;
+        private double DestLat;
+        private double DesLog;
+        private String result;
+        Exception error;
+
+        // constructor
+        public getDistanceGoogleDialog(ArrayList<usersLocal> Arg_chosenUsers) {
+            chosenUsers = Arg_chosenUsers;
+            for (int i = 0; i < chosenUsers.size(); i++) {
+                if (i == 0) {
+                    chosenClient = chosenUsers.get(i);
+                } else if (i == 1) {
+                    chosenTechnician = chosenUsers.get(i);
+                }
+            }
+            // client lat long
+            SourceLat = chosenClient.getGps_lati();
+            SourceLog = chosenClient.getGps_long();
+            // techni lat long
+            DestLat = chosenTechnician.getGps_lati();
+            DesLog = chosenTechnician.getGps_long();
+        }
+
+        // no try catch forthe sake of progressing wiht the task need to add it later !!
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            if (getActivity() != null) {
+                progressDialog = new ProgressDialog(getActivity());
+                progressDialog.setTitle("LOADING");
+                progressDialog.setMessage("Getting Direction");
+                progressDialog.show();
+            }
+        }
+
+
+        @Override
+        protected String doInBackground(String... urls) {
+            // we use the OkHttp library from https://github.com/square/okhttp
+            final String uri_target = distanceMakeURL(SourceLat, SourceLog, DestLat, DesLog);
+            // get password salt first
+            // uri request builder
+            Uri buildUrSalt = Uri.parse(uri_target)
+                    .buildUpon()
+                    .build();
+            this.result = generalHTTPQuest(buildUrSalt.toString());
+            return this.result;
+        }
+
+        @Override
+        protected void onPostExecute(String AYSNCresult) {
+            progressDialog.dismiss();
+            boolean JSON_flag = false;
+            // update preference based on the passed email address
+            // inside fragment thus
+            //if (AYSNCresult) {
+            // get the boolean to be overwritten
+            JSON_flag = getEstimation(AYSNCresult);
+            if (JSON_flag) {
+                // TODO: FINISH THE DIALOG POPUP
+                Bundle args = new Bundle();
+                args.putString(ARG_PARAM_NAME, chosenTechnician.getFname() + chosenTechnician.getLname());
+                args.putString(ARG_ETA, durationStringEstimation);
+                args.putString(ARG_DISTANCE, distanceStringEstimation);
+                args.putString(ARG_PHONE, chosenTechnician.getPhone());
+                args.putString(ARG_LATI1_CLIENT, String.valueOf(chosenClient.getGps_lati()));
+                args.putString(ARG_LONG1_CLIENT, String.valueOf(chosenClient.getGps_long()));
+                args.putString(ARG_LATI2_TECHNI, String.valueOf(chosenTechnician.getGps_lati()));
+                args.putString(ARG_LONG2_TECHNI, String.valueOf(chosenTechnician.getGps_long()));
+                args.putString(ARG_IS_CONFIRMED, String.valueOf(0));
+                if (getActivity() != null) {
+                    SharedPreferences pref = getActivity().getApplicationContext().getSharedPreferences(Config.SHARED_PREF, 0);
+                    String regId = pref.getString("regId", null);
+                    if (regId == null) {
+                        Toast.makeText(getActivity(), "Not Registered On Firebase", Toast.LENGTH_LONG).show();
+                    } else {
+                        args.putString(ARG_CLIENT_FIREBASE_ID, regId);
+                        args.putString(ARG_CLIENT_USER_ID, String.valueOf(chosenClient.getUserID()));
+                        args.putString(ARG_TECHNI_FIREBASE_ID, "");
+                        args.putString(ARG_TECHNI_USER_ID, String.valueOf(chosenTechnician.getUserID()));
+                        FragmentManager fragmentManager = getChildFragmentManager();
+                        dialogRequestFragment requestPopUp = new dialogRequestFragment();
+                        requestPopUp.setArguments(args);
+                        requestPopUp.show(fragmentManager, "sam");
+                    }
+                }
+            }
+        }
+    }
+
+        private String distanceStringEstimation = null;
+        private String durationStringEstimation = null;
+
+        //The parameter is the server response
+        private boolean getEstimation(String result) {
+            Exception error;
+            try {
+                //Parsing json
+                final JSONObject jsonRespRouteDistance = new JSONObject(result);
+                String status = jsonRespRouteDistance.getString("status");
+                if (status.equals("OK")) {
+
+                    JSONObject jsonRespData = jsonRespRouteDistance.getJSONArray("rows")
+                            .getJSONObject(0)
+                            .getJSONArray("elements")
+                            .getJSONObject(0);
+                    if(jsonRespData.getString("status").equals("OK")) {
+                        JSONObject jsonDistance = jsonRespData.getJSONObject("distance");
+                        this.distanceStringEstimation = jsonDistance.get("text").toString();
+
+                        JSONObject jsonDuration = jsonRespData.getJSONObject("duration");
+                        this.durationStringEstimation = jsonDuration.get("text").toString();
+                        return true;
+                    }
+                    else{
+                        return false;
+                    }
+                } else {
+                    return false;
+                }
+            } catch (JSONException e) {
+                error = e;
+                return false;
+            }
+        }
 
     // Async syntax AsyncTask <TypeOfVarArgParams, ProgressValue, ResultValue>
     private class SERVERUpdateCurrentLocation extends AsyncTask<String, Void, String> {
@@ -423,92 +622,87 @@ public class HomeFragment extends Fragment implements GoogleApiClient.Connection
     }
 
 
-
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-
         super.onActivityCreated(savedInstanceState);
         // by default the map has to be reinstated all the time to ensure up to date location
         initializeMap();
     }
 
     // dodgy code probably fix it tho
-    public int closestTechnician() {
-        int userNumber;
+
+    private int closestTechnician() {
+        int currentTechnicianID;
+        int userID;
+        if (getActivity() != null) {
+            sharedPref = getActivity().getPreferences(Context.MODE_PRIVATE);
+            userID = Integer.valueOf(sharedPref.getString(getString(R.string.userIdLoggedIn), ""));
+        } else {
+            return currentTechnicianID = -1;
+        }
+        securifyUserDatabaseHelper db;
         // get all the users list based on the database
         if (getActivity() != null) {
-            securifyUserDatabaseHelper db = new securifyUserDatabaseHelper(getActivity());
-            // create an instance of userslist which has all the user database inside it
-            List<usersLocal> userList = db.getAllUser();
-            if (getActivity() != null) {
-                sharedPref = getActivity().getPreferences(Context.MODE_PRIVATE);
-                int userID = Integer.valueOf(sharedPref.getString(getString(R.string.userIdLoggedIn), ""));
-                // get all the users that has the current userID
-                List<usersLocal> ListcurrentUserID = db.getUserOnUserID(userID);
-                usersLocal currentUser = null;
-                for (int i = 0; i < ListcurrentUserID.size(); i++) {
-                    currentUser = ListcurrentUserID.get(i);
+            db = new securifyUserDatabaseHelper(getActivity());
+        } else {
+            return currentTechnicianID = -1;
+        }
+        // create an instance of userslist which has all the user database inside it
+        // get all the users that has the current userID
+        List<usersLocal> ListcurrentUserID = db.getUserOnUserID(userID);
+        usersLocal currentUser = null;
+        for (int i = 0; i < ListcurrentUserID.size(); i++) {
+            currentUser = ListcurrentUserID.get(i);
+        }
+        List<usersLocal> userList = db.getAllUserExceptUserID(userID);
+        // check if the currentUser has been initialized properly.
+        double shortestDistance = -1;
+        currentTechnicianID = 0;
+        for (int i = 0; i < userList.size(); i++) {
+            double temp_distance = -1;
+            usersLocal user = userList.get(i);
+            // only filter whom are online
+            if (user.getIsOnline() != 0) {
+                // eliminate the calculation from the current user
+                //private static Double CalculateDistance(String Lat1, String Lon1, String Lat2, String Lon2)
+                String lat1 = String.valueOf(currentUser.getGps_lati());
+                String lon1 = String.valueOf(currentUser.getGps_long());
+                String lat2 = String.valueOf(user.getGps_lati());
+                String lon2 = String.valueOf(user.getGps_long());
+                temp_distance = CalculateDistance(lat1, lon1, lat2, lon2);
+                // if its within the first execution it will be the shortest
+                if (i == 0) {
+                    shortestDistance = temp_distance;
+                    currentTechnicianID = user.getUserID();
                 }
-                // check if the currentUser has been initialized properly.
-                if (currentUser != null) {
-                    double shortestDistance = -1;
-                    int currentTechnicianID = 0;
-                    for (int i = 0; i < userList.size(); i++) {
-                        double temp_distance = -1;
-                        usersLocal user = userList.get(i);
-                        //private static Double CalculateDistance(String Lat1, String Lon1, String Lat2, String Lon2)
-                        String lat1 = String.valueOf(currentUser.getGps_lati());
-                        String lon1 = String.valueOf(currentUser.getGps_long());
-                        String lat2 = String.valueOf(user.getGps_lati());
-                        String lon2 = String.valueOf(user.getGps_long());
-                        temp_distance = CalculateDistance(lat1, lon1, lat2, lon2);
-                        // if its within the first execution it will be the shortest
-                        if (i == 0) {
-                            shortestDistance = temp_distance;
-                            currentTechnicianID = currentUser.getUserID();
-                        }
-                        // if not the first execution and the shortestDistance is greater than calc
-                        else if (i != 0 && shortestDistance > temp_distance) {
-                            // asign shortest distance = calc_temporary distance.
-                            shortestDistance = temp_distance;
-                            // assign the user ID
-                            currentTechnicianID = currentUser.getUserID();
-                        }
-                    }
-                    if (currentTechnicianID == 0 || shortestDistance == -1) {
-                        return userNumber = -1;
-                    } else {
-                        return currentTechnicianID;
-                    }
+                // if not the first execution and the shortestDistance is greater than calc
+                else if (i != 0 && shortestDistance > temp_distance) {
+                    // asign shortest distance = calc_temporary distance.
+                    shortestDistance = temp_distance;
+                    // assign the user ID
+                    currentTechnicianID = user.getUserID();
+                    //closestTechnician = user;
                 }
-                return userNumber = -1;
-            } else {
-                return userNumber = -1;
             }
         }
-        return userNumber = -1;
+        return currentTechnicianID;
     }
 
-    public void  SetZoomlevel(ArrayList<LatLng> listLatLng)
-    {
+    public void SetZoomlevel(ArrayList<LatLng> listLatLng) {
         final GoogleMap googleMap = mMap;
-        if (listLatLng != null && listLatLng.size() == 1)
-        {
+        if (listLatLng != null && listLatLng.size() == 1) {
             googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(listLatLng.get(0), 10));
-        }
-        else if (listLatLng != null && listLatLng.size() > 1)
-        {
+        } else if (listLatLng != null && listLatLng.size() > 1) {
             final Builder builder = LatLngBounds.builder();
-            for (int i = 0; i < listLatLng.size(); i++)
-            {
+            for (int i = 0; i < listLatLng.size(); i++) {
                 builder.include(listLatLng.get(i));
             }
-                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-                supportMapFragment = (SupportMapFragment) fragmentManager.findFragmentById(R.id.map_container);
-                // set camera to view all the marker within the map
-                googleMap.moveCamera(CameraUpdateFactory.newLatLngBounds(builder.build(), inflatedView.findViewById(R.id.map_container)
-                                .getWidth(), inflatedView.findViewById(R.id.map_container).getHeight(), 80));
-            }
+            FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+            supportMapFragment = (SupportMapFragment) fragmentManager.findFragmentById(R.id.map_container);
+            // set camera to view all the marker within the map
+            googleMap.moveCamera(CameraUpdateFactory.newLatLngBounds(builder.build(), inflatedView.findViewById(R.id.map_container)
+                    .getWidth(), inflatedView.findViewById(R.id.map_container).getHeight(), 80));
+        }
     }
 
     @Override
@@ -544,8 +738,7 @@ public class HomeFragment extends Fragment implements GoogleApiClient.Connection
                 //Request Location Permission
                 checkLocationPermission();
             }
-        }
-        else {
+        } else {
             buildGoogleApiClient();
             mMap.setMyLocationEnabled(true);
         }
@@ -576,13 +769,12 @@ public class HomeFragment extends Fragment implements GoogleApiClient.Connection
     private void setData() {
         // remove the old marker
         // if its the first execution then there is no need to remove the marker
-        if (listMarker != null) {
-            RemovingLocations(listMarker);
-        }
+
+        RemovingLocations(listMarker);
         // instantiate a new markerlist
         this.usersListLatLngBean = new ArrayList<LatLngBean>();
         // create an instance of the database helper
-        if(getActivity() != null) {
+        if (getActivity() != null) {
             securifyUserDatabaseHelper db = new securifyUserDatabaseHelper(getActivity());
             // create an instance of userslist which has all the user database inside it
             List<usersLocal> userList = db.getAllUser();
@@ -603,6 +795,7 @@ public class HomeFragment extends Fragment implements GoogleApiClient.Connection
                             bean.setSnippet(user.getPhone());
                             bean.setLongitude(insta_1_long);
                             bean.setLatitude(insta_2_lati);
+                            bean.setIsOnline(user.getIsOnline());
                         }
                         // add to the list of bean
                         usersListLatLngBean.add(bean);
@@ -614,87 +807,76 @@ public class HomeFragment extends Fragment implements GoogleApiClient.Connection
         }
     }
 
-    private ArrayList<LatLng>listLatLng;
-    private ArrayList<Marker>listMarker;
+    private ArrayList<LatLng> listLatLng;
+    private ArrayList<Marker> listMarker = new ArrayList<Marker>();
 
-    void LoadingLocations(ArrayList<LatLngBean> arrayList)
-    {
-        if(arrayList.size()>0)
-        {
-            try
-            {
-                listLatLng=new ArrayList<LatLng>();
-                for (int i = 0; i < arrayList.size(); i++)
-                {
-                    LatLngBean bean=arrayList.get(i);
-                    if(bean.getLatitude().length()>0 && bean.getLongitude().length()>0)
-                    {
-                        double lat=Double.parseDouble(bean.getLatitude());
-                        double lon=Double.parseDouble(bean.getLongitude());
+    private void LoadingLocations(ArrayList<LatLngBean> arrayList) {
+        if (arrayList.size() > 0) {
+            try {
+                listLatLng = new ArrayList<LatLng>();
+                for (int i = 0; i < arrayList.size(); i++) {
+                    LatLngBean bean = arrayList.get(i);
+                    if (bean.getLatitude().length() > 0 && bean.getLongitude().length() > 0) {
+                        double lat = Double.parseDouble(bean.getLatitude());
+                        double lon = Double.parseDouble(bean.getLongitude());
                         // create a new list of marker
-                        Marker marker = mMap.addMarker(new MarkerOptions()
-                                .position(new LatLng(lat,lon))
+                        // only create maker for those who are online by the local database
+                        if(bean.getIsOnline() == 1)
+                        {
+                            Marker marker = mMap.addMarker(new MarkerOptions()
+                                .position(new LatLng(lat, lon))
                                 .title(bean.getTitle())
                                 .snippet(bean.getSnippet())
                                 .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
-                        // add the marker on the local list
-                        listMarker.add(marker);
-                        //Add Marker to Hashmap
-                        hashMapMarker.put(marker,bean);
-                        //Set Zoom Level of Map pin
-                        LatLng object=new LatLng(lat, lon);
-                        listLatLng.add(object);
+
+                            // add the marker on the local list
+                            this.listMarker.add(marker);
+                            //Add Marker to Hashmap
+                            hashMapMarker.put(marker, bean);
+                            //Set Zoom Level of Map pin
+                            LatLng object = new LatLng(lat, lon);
+                            listLatLng.add(object);
+                        }
+
                     }
                 }
                 //SetZoomlevel(listLatLng);
-            }
-            catch (NumberFormatException e)
-            {
+            } catch (NumberFormatException e) {
                 e.printStackTrace();
             }
             mMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
                 @Override
-                public void onInfoWindowClick(Marker position)
-                {
-                    LatLngBean bean=hashMapMarker.get(position);
-                    Toast.makeText(getActivity(), bean.getTitle(),Toast.LENGTH_SHORT).show();
+                public void onInfoWindowClick(Marker position) {
+                    LatLngBean bean = hashMapMarker.get(position);
+                    Toast.makeText(getActivity(), bean.getTitle(), Toast.LENGTH_SHORT).show();
                 }
             });
-        }
-        else
-        {
-            Toast.makeText(getActivity(),"Sorry! unable to load markers", Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(getActivity(), "Sorry! unable to load markers", Toast.LENGTH_SHORT).show();
         }
     }
 
-    void RemovingLocations( ArrayList<Marker> markerArgument)
-    {
-        if(markerArgument.size()>0)
-        {
-            try
-            {
-                for (int i = 0; i < markerArgument.size(); i++)
-                {
+    private void RemovingLocations(ArrayList<Marker> markerArgument) {
+        if (markerArgument.size() > 0) {
+            try {
+                for (int i = 0; i < markerArgument.size(); i++) {
                     // get the current value being pointed
-                    Marker markerToRemove =markerArgument.get(i);
+                    Marker markerToRemove = markerArgument.get(i);
                     // remove the marker
                     markerToRemove.remove();
                 }
-            }
-            catch (NumberFormatException e)
-            {
+                this.listMarker = new ArrayList<Marker>();
+            } catch (NumberFormatException e) {
                 e.printStackTrace();
             }
-        }
-        else
-        {
-            Toast.makeText(getActivity(),"Sorry! unable to remove marker", Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(getActivity(), "Sorry! unable to remove marker", Toast.LENGTH_SHORT).show();
         }
     }
 
 
     protected synchronized void buildGoogleApiClient() {
-        if(getActivity() != null) {
+        if (getActivity() != null) {
             mGoogleApiClient = new GoogleApiClient.Builder(getActivity())
                     .addConnectionCallbacks(this)
                     .addOnConnectionFailedListener(this)
@@ -706,6 +888,7 @@ public class HomeFragment extends Fragment implements GoogleApiClient.Connection
 
     // fucntion to check on location permission
     public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
+
     private void checkLocationPermission() {
         if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED) {
@@ -724,7 +907,7 @@ public class HomeFragment extends Fragment implements GoogleApiClient.Connection
                                 //Prompt the user once explanation has been shown
                                 ActivityCompat.requestPermissions(getActivity(),
                                         new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                                        MY_PERMISSIONS_REQUEST_LOCATION );
+                                        MY_PERMISSIONS_REQUEST_LOCATION);
                             }
                         })
                         .create()
@@ -733,7 +916,7 @@ public class HomeFragment extends Fragment implements GoogleApiClient.Connection
                 // No explanation needed, we can request the permission.
                 ActivityCompat.requestPermissions(getActivity(),
                         new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                        MY_PERMISSIONS_REQUEST_LOCATION );
+                        MY_PERMISSIONS_REQUEST_LOCATION);
             }
         }
     }
@@ -774,8 +957,7 @@ public class HomeFragment extends Fragment implements GoogleApiClient.Connection
     private String isOnline;
 
     @Override
-    public void onLocationChanged(Location location)
-    {
+    public void onLocationChanged(Location location) {
         mLastLocation = location;
         if (mCurrLocationMarker != null) {
             mCurrLocationMarker.remove();
@@ -796,7 +978,7 @@ public class HomeFragment extends Fragment implements GoogleApiClient.Connection
         Double currentLongDoub = latLng.longitude;
         currentLong = currentLongDoub.toString();
         // get from the database
-        if(getActivity()!=null) {
+        if (getActivity() != null) {
             sharedPref = getActivity().getPreferences(Context.MODE_PRIVATE);
             if (sharedPref != null) {
                 userID = sharedPref.getString(getString(R.string.userIdLoggedIn), "");
@@ -807,13 +989,72 @@ public class HomeFragment extends Fragment implements GoogleApiClient.Connection
         }
     }
 
-    @Override
-    public void onConnected(@Nullable Bundle bundle) {
+    private class getDistanceGoogleHUD extends AsyncTask<String, String, String> {
+        private ArrayList<usersLocal> chosenUsers = new ArrayList<usersLocal>();
+        private usersLocal chosenClient;
+        private usersLocal chosenTechnician;
+        private double SourceLat;
+        private double SourceLog;
+        private double DestLat;
+        private double DesLog;
+        private String result;
+        Exception error;
+
+        // constructor
+        public getDistanceGoogleHUD(ArrayList<usersLocal> Arg_chosenUsers) {
+            chosenUsers = Arg_chosenUsers;
+            for (int i = 0; i < chosenUsers.size(); i++) {
+                if (i == 0) {
+                    chosenClient = chosenUsers.get(i);
+                } else if (i == 1) {
+                    chosenTechnician = chosenUsers.get(i);
+                }
+            }
+            // client lat long
+            SourceLat = chosenClient.getGps_lati();
+            SourceLog = chosenClient.getGps_long();
+            // techni lat long
+            DestLat = chosenTechnician.getGps_lati();
+            DesLog = chosenTechnician.getGps_long();
+        }
+
+        @Override
+        protected String doInBackground(String... urls) {
+            // we use the OkHttp library from https://github.com/square/okhttp
+            final String uri_target = distanceMakeURL(SourceLat, SourceLog, DestLat, DesLog);
+            // get password salt first
+            // uri request builder
+            Uri buildUrSalt = Uri.parse(uri_target)
+                    .buildUpon()
+                    .build();
+            this.result = generalHTTPQuest(buildUrSalt.toString());
+            return this.result;
+        }
+
+        @Override
+        protected void onPostExecute(String AYSNCresult) {
+            boolean JSON_flag = false;
+            // update preference based on the passed email address
+            // inside fragment thus
+            //if (AYSNCresult) {
+            // get the boolean to be overwritten
+            JSON_flag = getEstimation(AYSNCresult);
+            if (JSON_flag) {
+                // TODO: FINISH THE DIALOG POPUP
+                        StatusETA.setText("ETA: " + durationStringEstimation);
+                        DistanceETA.setText("Distance: "+ distanceStringEstimation);
+             }
+            }
+        }
+
+
+        @Override
+        public void onConnected(@Nullable Bundle bundle) {
         mLocationRequest = new LocationRequest();
         mLocationRequest.setInterval(1000);
         mLocationRequest.setFastestInterval(1000);
         mLocationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
-        if(getActivity()!= null) {
+        if (getActivity() != null) {
             if (ContextCompat.checkSelfPermission(getActivity(),
                     Manifest.permission.ACCESS_FINE_LOCATION)
                     == PackageManager.PERMISSION_GRANTED) {
@@ -833,31 +1074,32 @@ public class HomeFragment extends Fragment implements GoogleApiClient.Connection
             markerOptions.title("Current Position");
             markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
             mCurrLocationMarker = mMap.addMarker(markerOptions);
-            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng,11));
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 11));
         }
     }
 
     @Override
-    public void onConnectionSuspended(int i) {}
+    public void onConnectionSuspended(int i) {
+    }
 
     @Override
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {}
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+    }
 
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
 
-    public String DirectionMakeURL (double sourcelat, double sourcelog, double destlat, double destlog ){
+    public String DirectionMakeURL(double sourcelat, double sourcelog, double destlat, double destlog) {
         StringBuilder urlString = new StringBuilder();
         urlString.append("https://maps.googleapis.com/maps/api/directions/json");
-        urlString.append("?origin=");// from
+        urlString.append("?origins=");// from
         urlString.append(Double.toString(sourcelat));
         urlString.append(",");
-        urlString.append(Double.toString( sourcelog));
-        urlString.append("&destination=");// to
-        urlString
-                .append(Double.toString( destlat));
+        urlString.append(Double.toString(sourcelog));
+        urlString.append("&destinations=");// to
+        urlString.append(Double.toString(destlat));
         urlString.append(",");
         urlString.append(Double.toString(destlog));
         urlString.append("&sensor=false&mode=driving&alternatives=true");
@@ -872,6 +1114,7 @@ public class HomeFragment extends Fragment implements GoogleApiClient.Connection
         private double DesLog;
         private String result;
         Exception error;
+
         // constructor
         public getDirectionGoogle(double sourcelat, double sourcelog, double destlat, double destlog) {
             SourceLat = sourcelat;
@@ -879,16 +1122,18 @@ public class HomeFragment extends Fragment implements GoogleApiClient.Connection
             DestLat = destlat;
             DesLog = destlog;
         }
+
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            if(getActivity() != null) {
+            if (getActivity() != null) {
                 progressDialog = new ProgressDialog(getActivity());
                 progressDialog.setTitle("LOADING");
                 progressDialog.setMessage("Getting Direction");
                 progressDialog.show();
             }
         }
+
         @Override
         protected Boolean doInBackground(String... urls) {
             try {
@@ -901,24 +1146,25 @@ public class HomeFragment extends Fragment implements GoogleApiClient.Connection
                         .build();
                 this.result = generalHTTPQuest(buildUrSalt.toString());
                 return true;
-            } catch (Exception e){
+            } catch (Exception e) {
                 error = e;
                 return false;
             }
         }
+
         @Override
         protected void onPostExecute(Boolean AYSNCresult) {
             progressDialog.dismiss();
             // update preference based on the passed email address
             // inside fragment thus
-            if (AYSNCresult){
+            if (AYSNCresult) {
                 drawPath(this.result);
             }
         }
     }
 
     //The parameter is the server response
-    public void drawPath(String  result) {
+    public void drawPath(String result) {
         try {
             //Parsing json
             final JSONObject json = new JSONObject(result);
@@ -933,8 +1179,7 @@ public class HomeFragment extends Fragment implements GoogleApiClient.Connection
                     .color(Color.RED)
                     .geodesic(true)
             );
-        }
-        catch (JSONException e) {
+        } catch (JSONException e) {
 
         }
     }
@@ -964,32 +1209,14 @@ public class HomeFragment extends Fragment implements GoogleApiClient.Connection
             int dlng = ((result & 1) != 0 ? ~(result >> 1) : (result >> 1));
             lng += dlng;
 
-            LatLng p = new LatLng( (((double) lat / 1E5)),
-                    (((double) lng / 1E5) ));
+            LatLng p = new LatLng((((double) lat / 1E5)),
+                    (((double) lng / 1E5)));
             poly.add(p);
         }
 
         return poly;
     }
 
-    // get the distance matrix API
-    //https://maps.googleapis.com/maps/api/distancematrix/json?origins=54.406505,18.67708&destinations=54.446251,18.570993
-    //&mode=driving&language=en-EN&sensor=false&key=AIzaSyBs1XJE34XAi6oy4x-1EkI4-fBOtBnTzAM
-    public String distanceMakeURL (double sourcelat, double sourcelog, double destlat, double destlog ){
-        StringBuilder urlString = new StringBuilder();
-        urlString.append("https://maps.googleapis.com/maps/api/distancematrix/json");
-        urlString.append("?origin=");// from
-        urlString.append(Double.toString(sourcelat));
-        urlString.append(",");
-        urlString.append(Double.toString( sourcelog));
-        urlString.append("&destination=");// to
-        urlString.append(Double.toString( destlat));
-        urlString.append(",");
-        urlString.append(Double.toString(destlog));
-        urlString.append("&mode=driving&language=en-EN&sensor=false");
-        urlString.append("&key=" + getString(R.string.googleAPICredetialServer));
-        return urlString.toString();
-    }
 
     private class getDistanceGoogle extends AsyncTask<String, Void, Boolean> {
         private double SourceLat;
@@ -998,6 +1225,7 @@ public class HomeFragment extends Fragment implements GoogleApiClient.Connection
         private double DesLog;
         private String result;
         Exception error;
+
         // constructor
         public getDistanceGoogle(double sourcelat, double sourcelog, double destlat, double destlog) {
             SourceLat = sourcelat;
@@ -1005,16 +1233,18 @@ public class HomeFragment extends Fragment implements GoogleApiClient.Connection
             DestLat = destlat;
             DesLog = destlog;
         }
+
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            if(getActivity() != null) {
+            if (getActivity() != null) {
                 progressDialog = new ProgressDialog(getActivity());
                 progressDialog.setTitle("LOADING");
                 progressDialog.setMessage("Getting Estimation");
                 progressDialog.show();
             }
         }
+
         @Override
         protected Boolean doInBackground(String... urls) {
             try {
@@ -1027,57 +1257,22 @@ public class HomeFragment extends Fragment implements GoogleApiClient.Connection
                         .build();
                 this.result = generalHTTPQuest(buildUrSalt.toString());
                 return true;
-            } catch (Exception e){
+            } catch (Exception e) {
                 error = e;
                 return false;
             }
         }
+
         @Override
         protected void onPostExecute(Boolean AYSNCresult) {
             progressDialog.dismiss();
             // update preference based on the passed email address
             // inside fragment thus
-            if (AYSNCresult){
-                getEstimation(this.result);
+            if (AYSNCresult) {
+                //getEstimation(this.result);
             }
         }
     }
-
-    private boolean getEstimation_flag;
-    private String distanceStringEstimation;
-    private String durationStringEstimation;
-    //The parameter is the server response
-    public boolean getEstimation(String  result) {
-        Exception error;
-        try {
-            //Parsing json
-            final JSONObject jsonRespRouteDistance = new JSONObject(result);
-            String status = jsonRespRouteDistance.getJSONObject("status").get("status").toString();
-            if(status.equals("OK")) {
-
-                JSONObject jsonRespData = jsonRespRouteDistance.getJSONArray("rows")
-                        .getJSONObject(0)
-                        .getJSONArray("elements")
-                        .getJSONObject(0);
-
-                JSONObject jsonDistance = jsonRespData.getJSONObject("distance");
-                String distanceStringEstimation = jsonDistance.get("text").toString();
-
-                JSONObject jsonDuration = jsonRespData.getJSONObject("duration");
-                String durationStringEstimation = jsonRespRouteDistance.get("text").toString();
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
-        catch (JSONException e) {
-            error = e;
-            return false;
-        }
-    }
-
 
 
     private class StoreJSonDataInToSQLiteClass extends AsyncTask<String, Void, String> {
@@ -1109,7 +1304,7 @@ public class HomeFragment extends Fragment implements GoogleApiClient.Connection
         protected String doInBackground(String... urls) {
 
             // we use the OkHttp library from https://github.com/square/okhttp
-            final String uri_target= new String(getString(R.string.ServerURI));
+            final String uri_target = new String(getString(R.string.ServerURI));
             final String page_target_salt = new String("getAllUser.php?");
             // get password salt first
             // uri request builder
@@ -1154,11 +1349,9 @@ public class HomeFragment extends Fragment implements GoogleApiClient.Connection
             }
             if (status_result == -1) {
                 return "Cannot Connect To The Server";
-            }
-            else if(status_result == 0) {
+            } else if (status_result == 0) {
                 return "Query Error";
-            }
-            else {
+            } else {
                 return "Database Synchronized";
             }
         }
@@ -1183,7 +1376,7 @@ public class HomeFragment extends Fragment implements GoogleApiClient.Connection
         private String userID_instance;
 
         // constructor
-        public SendFireBaseID(String userID,  String firebase_ID) {
+        public SendFireBaseID(String userID, String firebase_ID) {
             this.firebase_ID_instance = firebase_ID;
             this.userID_instance = userID;
         }
@@ -1191,7 +1384,7 @@ public class HomeFragment extends Fragment implements GoogleApiClient.Connection
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            if(getActivity() != null) {
+            if (getActivity() != null) {
                 progressDialog = new ProgressDialog(getActivity());
                 progressDialog.setTitle("LOADING");
                 progressDialog.setMessage("Synchronizing Firebase ID");
@@ -1202,13 +1395,13 @@ public class HomeFragment extends Fragment implements GoogleApiClient.Connection
         @Override
         protected String doInBackground(String... urls) {
             // we use the OkHttp library from https://github.com/square/okhttp
-            final String uri_target= new String(getString(R.string.ServerURI));
+            final String uri_target = new String(getString(R.string.ServerURI));
             final String page_target_salt = new String("updateFirebaseID.php?");
             // get password salt first
             // uri request builder
             Uri buildUrSalt = Uri.parse(uri_target + page_target_salt)
                     .buildUpon()
-                    .appendQueryParameter(COLUMN_FIREBASE_ID,this.firebase_ID_instance)
+                    .appendQueryParameter(COLUMN_FIREBASE_ID, this.firebase_ID_instance)
                     .appendQueryParameter(COLUMN_USERID, this.userID_instance)
                     .build();
             String result = generalHTTPQuest(buildUrSalt.toString());
@@ -1221,11 +1414,9 @@ public class HomeFragment extends Fragment implements GoogleApiClient.Connection
             }
             if (status_result == -1) {
                 return "Cannot Connect To The Server";
-            }
-            else if(status_result == 0) {
+            } else if (status_result == 0) {
                 return "Invalid Credentials";
-            }
-            else if(status_result == 1){
+            } else if (status_result == 1) {
                 return "Update Success";
             }
             return "";
@@ -1237,7 +1428,7 @@ public class HomeFragment extends Fragment implements GoogleApiClient.Connection
             // update preference based on the passed email address
             // inside fragment thus
             if (result.equals("Update success")) {
-                if(getActivity()!= null) {
+                if (getActivity() != null) {
                     Toast.makeText(getActivity(), result, Toast.LENGTH_LONG).show();
                 }
             }
@@ -1246,7 +1437,7 @@ public class HomeFragment extends Fragment implements GoogleApiClient.Connection
     }
 
     // https://rosettacode.org/wiki/Haversine_formula#Java
-    private static Double CalculateDistance(String Lat1, String Lon1, String Lat2, String Lon2) {
+    private Double CalculateDistance(String Lat1, String Lon1, String Lat2, String Lon2) {
         final double EarthRadius = 6372.8; // Earth Radius In kilometers
         Double lat1 = Double.parseDouble(Lat1);
         Double lon1 = Double.parseDouble(Lon1);
@@ -1260,6 +1451,7 @@ public class HomeFragment extends Fragment implements GoogleApiClient.Connection
         Double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
         Double distance = EarthRadius * c;
         return distance;
+
     }
 
 }

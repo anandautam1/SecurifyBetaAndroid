@@ -15,7 +15,7 @@
             android:id="@+id/securifyLogo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="?attr/colorPrimary"
+            android:background="@color/colorPrimary"
             app:srcCompat="@mipmap/securify_logo" />
 
         <LinearLayout
@@ -73,6 +73,19 @@
 
                     <TextView
                         android:id="@+id/Estimation"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="TextView"
+                        android:textSize="24sp" />
+
+                    <TextView
+                        android:id="@+id/distanceInfo"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/RequestTechnicianDistance" />
+
+                    <TextView
+                        android:id="@+id/Distance"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="TextView"

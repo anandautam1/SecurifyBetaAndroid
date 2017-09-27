@@ -243,9 +243,15 @@ public class securifyUserDatabaseHelper extends SQLiteOpenHelper {
                 COLUMN_USERID,
                 COLUMN_FNAME,
                 COLUMN_LNAME,
+                COLUMN_EMAIL,
                 COLUMN_PHONE,
                 COLUMN_PASS_HASHED,
-                COLUMN_ROLE
+                COLUMN_PASS_SALT,
+                COLUMN_ROLE,
+                COLUMN_GPS_LONG,
+                COLUMN_GPS_LATI,
+                COLUMN_ISONLINE,
+                COLUMN_LASTUPDATED
         };
 
         String userIDString = String.valueOf(userID);
@@ -259,7 +265,8 @@ public class securifyUserDatabaseHelper extends SQLiteOpenHelper {
 
         SQLiteDatabase db = this.getReadableDatabase();
 
-        String selection = COLUMN_EMAIL + " = ?";
+        // select to sacn on the column of the userID
+        String selection = COLUMN_USERID + " = ?";
 
         // query the usersLocal table
         /**
@@ -286,7 +293,83 @@ public class securifyUserDatabaseHelper extends SQLiteOpenHelper {
                 userLocal.setPhone(cursor.getString(cursor.getColumnIndex(COLUMN_PHONE)));
                 userLocal.setPass_hashed(cursor.getString(cursor.getColumnIndex(COLUMN_PASS_HASHED)));
                 userLocal.setRole(cursor.getString(cursor.getColumnIndex(COLUMN_ROLE)));
+                userLocal.setGps_long(Double.parseDouble(cursor.getString(cursor.getColumnIndex(COLUMN_GPS_LONG))));
+                userLocal.setGps_lati(Double.parseDouble(cursor.getString(cursor.getColumnIndex(COLUMN_GPS_LATI))));
+                userLocal.setIsOnline(Integer.parseInt(cursor.getString(cursor.getColumnIndex(COLUMN_ISONLINE))));
+                userLocal.setLastUpdated(cursor.getString(cursor.getColumnIndex(COLUMN_LASTUPDATED)));
+                // Adding usersLocal record to list
+                userList.add(userLocal);
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        db.close();
+        // return usersLocal list
+        return userList;
 
+    }
+
+    public List<usersLocal> getAllUserExceptUserID(int userID) {
+        // email stirng will be the first argument within the query
+
+        // array of columns to fetch
+        String[] columns = {
+                COLUMN_USERID,
+                COLUMN_FNAME,
+                COLUMN_LNAME,
+                COLUMN_EMAIL,
+                COLUMN_PHONE,
+                COLUMN_PASS_HASHED,
+                COLUMN_PASS_SALT,
+                COLUMN_ROLE,
+                COLUMN_GPS_LONG,
+                COLUMN_GPS_LATI,
+                COLUMN_ISONLINE,
+                COLUMN_LASTUPDATED
+        };
+
+        String userIDString = String.valueOf(userID);
+
+        String[] like = {
+                userIDString
+        };
+        // sorting orders
+        String sortOrder = COLUMN_USERID + " ASC";
+        List<usersLocal> userList = new ArrayList<usersLocal>();
+
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        // select to sacn on the column of the userID
+        String selection = COLUMN_USERID + " != ?";
+
+        // query the usersLocal table
+        /**
+         * Here query function is used to fetch records from usersLocal table this function works like we use sql query.
+         * SQL query equivalent to this query function is
+         * SELECT user_id,user_name,user_email,user_password FROM usersLocal ORDER BY user_name;
+         */
+        Cursor cursor = db.query(TABLE_USER, //Table to query
+                columns,                    //columns to return
+                selection,                  //columns for the WHERE clause
+                like,              //The values for the WHERE clause
+                null,                       //group the rows
+                null,                      //filter by row groups
+                sortOrder);
+
+        // Traversing through all rows and adding to list
+        if (cursor.moveToFirst()) {
+            do {
+                // new instance of a userLocal
+                usersLocal userLocal = new usersLocal();
+                userLocal.setUserID(Integer.parseInt(cursor.getString(cursor.getColumnIndex(COLUMN_USERID))));
+                userLocal.setFname(cursor.getString(cursor.getColumnIndex(COLUMN_FNAME)));
+                userLocal.setLname(cursor.getString(cursor.getColumnIndex(COLUMN_LNAME)));
+                userLocal.setPhone(cursor.getString(cursor.getColumnIndex(COLUMN_PHONE)));
+                userLocal.setPass_hashed(cursor.getString(cursor.getColumnIndex(COLUMN_PASS_HASHED)));
+                userLocal.setRole(cursor.getString(cursor.getColumnIndex(COLUMN_ROLE)));
+                userLocal.setGps_long(Double.parseDouble(cursor.getString(cursor.getColumnIndex(COLUMN_GPS_LONG))));
+                userLocal.setGps_lati(Double.parseDouble(cursor.getString(cursor.getColumnIndex(COLUMN_GPS_LATI))));
+                userLocal.setIsOnline(Integer.parseInt(cursor.getString(cursor.getColumnIndex(COLUMN_ISONLINE))));
+                userLocal.setLastUpdated(cursor.getString(cursor.getColumnIndex(COLUMN_LASTUPDATED)));
                 // Adding usersLocal record to list
                 userList.add(userLocal);
             } while (cursor.moveToNext());
