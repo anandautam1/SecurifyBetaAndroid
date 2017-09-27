@@ -183,7 +183,8 @@ public class HomeFragment extends Fragment implements GoogleApiClient.Connection
     }
 
     // for the dialog
-    private final String ARG_PARAM_NAME = "Name_key";
+    private final String ARG_CLIENT_PARAM_NAME = "Client_Name_key";
+    private final String ARG_TECHNI_PARAM_NAME = "Techni_Name_key";
     private final String ARG_ETA = "ETA_key";
     private final String ARG_DISTANCE = "Distance_key";
     private final String ARG_PHONE = "Phone_Key";
@@ -218,12 +219,15 @@ public class HomeFragment extends Fragment implements GoogleApiClient.Connection
                 } else if (intent.getAction().equals(Config.PUSH_NOTIFICATION)) {
                     // new push notification is received
                     String message = intent.getStringExtra("message");
-                    String Name_key = intent.getStringExtra(ARG_PARAM_NAME);
+                    String Client_Name_key = intent.getStringExtra(ARG_CLIENT_PARAM_NAME);
+                    String Techni_Name_key = intent.getStringExtra(ARG_TECHNI_PARAM_NAME);
                     String ETA_key = intent.getStringExtra(ARG_ETA);
+                    String Distance_key = intent.getStringExtra(ARG_DISTANCE);
                     String Arg_phone = intent.getStringExtra(ARG_PHONE);
+                    String Client_Firebase_ID = intent.getStringExtra(ARG_CLIENT_FIREBASE_ID);
+                    String Client_User_ID = intent.getStringExtra(ARG_CLIENT_USER_ID);
                     String Arg_lati1 = intent.getStringExtra(ARG_LATI1_CLIENT);
                     String Arg_long1 = intent.getStringExtra(ARG_LONG1_CLIENT);
-                    String Client_Firebase_ID = intent.getStringExtra(ARG_CLIENT_FIREBASE_ID);
                     String Is_Confirmed = intent.getStringExtra(ARG_IS_CONFIRMED);
 
                     String Techni_Firebase_ID = intent.getStringExtra(ARG_TECHNI_FIREBASE_ID);
@@ -232,35 +236,43 @@ public class HomeFragment extends Fragment implements GoogleApiClient.Connection
                     String Arg_long2 = intent.getStringExtra(ARG_LONG2_TECHNI);
 
                     Bundle args = new Bundle();
-                    args.putString(ARG_PARAM_NAME, Name_key);
+                    // check if it has been confirmed properly then show the client firebase ID
+                    args.putString(ARG_CLIENT_FIREBASE_ID, Client_Firebase_ID);
+                    args.putString(ARG_CLIENT_USER_ID, Client_User_ID);
+                    args.putString(ARG_TECHNI_FIREBASE_ID, Techni_Firebase_ID);
+                    args.putString(ARG_TECHNI_USER_ID, Techni_User_ID);
+                    args.putString(ARG_CLIENT_PARAM_NAME, Client_Name_key);
+                    args.putString(ARG_TECHNI_PARAM_NAME, Techni_Name_key);
                     args.putString(ARG_ETA, ETA_key);
+                    args.putString(ARG_DISTANCE, Distance_key);
                     args.putString(ARG_PHONE, Arg_phone);
                     args.putString(ARG_LATI1_CLIENT, Arg_lati1);
                     args.putString(ARG_LONG1_CLIENT, Arg_long1);
+                    args.putString(ARG_LATI2_TECHNI, Arg_lati2);
+                    args.putString(ARG_LONG2_TECHNI, Arg_long2);
                     args.putString(ARG_IS_CONFIRMED, Is_Confirmed);
-                    // check if it has been confirmed properly then show the client firebase ID
-                    if (Is_Confirmed.equals("1")) {
-                        args.putString(ARG_CLIENT_FIREBASE_ID, Techni_Firebase_ID);
-                        args.putString(ARG_CLIENT_USER_ID, Techni_User_ID);
-                        args.putString(ARG_LATI2_TECHNI, Arg_lati2);
-                        args.putString(ARG_LONG2_TECHNI, Arg_long2);
-                    } else {
-                        args.putString(ARG_CLIENT_FIREBASE_ID, "");
-                        args.putString(ARG_CLIENT_USER_ID, "");
-                        args.putString(ARG_LATI2_TECHNI, "");
-                        args.putString(ARG_LONG2_TECHNI, "");
+
+                    if (Is_Confirmed.equals("0")) {
+
+                        // open up dialog by passing all the JSON
+                        FragmentManager fragmentManager = getChildFragmentManager();
+                        dialogRequestFragment requestPopUp = new dialogRequestFragment();
+                        requestPopUp.setArguments(args);
+                        requestPopUp.show(fragmentManager, "sam1");
+
+                    } else if (Is_Confirmed.equals("1")) {
+
+                        // open up dialog by passing all the JSON
+                        FragmentManager fragmentManager = getChildFragmentManager();
+                        dialogRequestFragment requestPopUp = new dialogRequestFragment();
+                        requestPopUp.setArguments(args);
+                        requestPopUp.show(fragmentManager, "sam2");
                     }
-                    // open up dialog by passing all the JSON
-                    FragmentManager fragmentManager = getChildFragmentManager();
-                    dialogRequestFragment requestPopUp = new dialogRequestFragment();
-                    requestPopUp.setArguments(args);
-                    requestPopUp.show(fragmentManager, "sam");
+
                 }
             }
         };
-
         displayFirebaseRegId();
-
     }
 
     @Override
@@ -312,13 +324,10 @@ public class HomeFragment extends Fragment implements GoogleApiClient.Connection
             supportMapFragment.getMapAsync(this);
         }
     }
-
     private Button RequestButton;
     private TextView StatusETA;
     private TextView DistanceETA;
     // private TextView QualityStatus;
-
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -332,7 +341,6 @@ public class HomeFragment extends Fragment implements GoogleApiClient.Connection
             @Override
             public void onClick(View view) {
                 // check out all the markers to view all services
-
                 int TechUserID = 0;
                 SetZoomlevel(listLatLng);
                 // estimate who will be the closest based on the local database sync
@@ -412,7 +420,6 @@ public class HomeFragment extends Fragment implements GoogleApiClient.Connection
                 // update the ETA field everytime
             }
         }
-
         return this.inflatedView;
     }
 
@@ -503,7 +510,8 @@ public class HomeFragment extends Fragment implements GoogleApiClient.Connection
             if (JSON_flag) {
                 // TODO: FINISH THE DIALOG POPUP
                 Bundle args = new Bundle();
-                args.putString(ARG_PARAM_NAME, chosenTechnician.getFname() + chosenTechnician.getLname());
+                args.putString(ARG_CLIENT_PARAM_NAME, chosenClient.getFname() + " " + chosenClient.getLname());
+                args.putString(ARG_TECHNI_PARAM_NAME, chosenTechnician.getFname() + " " +chosenTechnician.getLname());
                 args.putString(ARG_ETA, durationStringEstimation);
                 args.putString(ARG_DISTANCE, distanceStringEstimation);
                 args.putString(ARG_PHONE, chosenTechnician.getPhone());
@@ -852,7 +860,7 @@ public class HomeFragment extends Fragment implements GoogleApiClient.Connection
                 }
             });
         } else {
-            Toast.makeText(getActivity(), "Sorry! unable to load markers", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(getActivity(), "Sorry! unable to load markers", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -870,7 +878,7 @@ public class HomeFragment extends Fragment implements GoogleApiClient.Connection
                 e.printStackTrace();
             }
         } else {
-            Toast.makeText(getActivity(), "Sorry! unable to remove marker", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(getActivity(), "Sorry! unable to remove marker", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -1451,7 +1459,6 @@ public class HomeFragment extends Fragment implements GoogleApiClient.Connection
         Double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
         Double distance = EarthRadius * c;
         return distance;
-
     }
 
 }

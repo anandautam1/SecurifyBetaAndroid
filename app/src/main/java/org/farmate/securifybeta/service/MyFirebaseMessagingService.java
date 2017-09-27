@@ -72,18 +72,21 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         }
     }
 
-    private final String ARG_PARAM_NAME = "Name_key";
+    // for the dialog
+    private final String ARG_CLIENT_PARAM_NAME = "Client_Name_key";
+    private final String ARG_TECHNI_PARAM_NAME = "Techni_Name_key";
     private final String ARG_ETA = "ETA_key";
+    private final String ARG_DISTANCE = "Distance_key";
     private final String ARG_PHONE = "Phone_Key";
-    private final String ARG_LATI1 = "LATI_1_key";
-    private final String ARG_LONG1 = "LONG_1_key";
-    private final String ARG_LATI2 = "LATI_2_key";
-    private final String ARG_LONG2 = "LONG_2_key";
-    private final String IS_CONFIRMED = "CONFIRMATION_STATUS";
-    private final String CLIENT_FIREBASE_ID = "CLIENT_FIREBASE";
-    private final String CLIENT_USER_ID = "CLIENT_USERID";
-    private final String TECHNI_FIREBASE_ID = "TECHNI_FIREBASE";
-    private final String TECHNI_USER_ID = "TECHNI_USERID";
+    private final String ARG_LATI1_CLIENT = "LATI_1_key";
+    private final String ARG_LONG1_CLIENT = "LONG_1_key";
+    private final String ARG_LATI2_TECHNI = "LATI_2_key";
+    private final String ARG_LONG2_TECHNI = "LONG_2_key";
+    private final String ARG_IS_CONFIRMED = "CONFIRMATION_STATUS";
+    private final String ARG_CLIENT_FIREBASE_ID = "CLIENT_FIREBASE";
+    private final String ARG_CLIENT_USER_ID = "CLIENT_USERID";
+    private final String ARG_TECHNI_FIREBASE_ID = "TECHNI_FIREBASE";
+    private final String ARG_TECHNI_USER_ID = "TECHNI_USERID";
 
     private void handleDataMessage(JSONObject json) {
         Log.e(TAG, "push json: " + json.toString());
@@ -99,28 +102,29 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             JSONObject payload = data.getJSONObject("payload");
 
             // get the payload parameter from the json.
-            String Name_key = payload.getString(ARG_PARAM_NAME);
+            String Client_Name_key = payload.getString(ARG_CLIENT_PARAM_NAME);
+            String Techni_Name_key = payload.getString(ARG_TECHNI_PARAM_NAME);
             String ETA_key = payload.getString(ARG_ETA);
-            String Arg_phone = payload.getString(ARG_PHONE);
+            String Distance = payload.getString(ARG_DISTANCE);
+            String Phone = payload.getString(ARG_PHONE);
 
             // get the string payload
-            String Client_Firebase_ID = payload.getString(CLIENT_FIREBASE_ID);
-            String Client_User_ID = payload.getString(CLIENT_USER_ID);
-            String Arg_lati1 = payload.getString(ARG_LATI1);
-            String Arg_long1 = payload.getString(ARG_LONG1);
+            String Client_Firebase_ID = payload.getString(ARG_CLIENT_FIREBASE_ID);
+            String Client_User_ID = payload.getString(ARG_CLIENT_USER_ID);
+            String Arg_lati1 = payload.getString(ARG_LATI1_CLIENT);
+            String Arg_long1 = payload.getString(ARG_LONG1_CLIENT);
             // based on the confirmation
-            String Is_Confirmed = payload.getString(IS_CONFIRMED);
+            String Is_Confirmed = payload.getString(ARG_IS_CONFIRMED);
             String Techni_Firebase_ID = "";
             String Techni_User_ID = "";
             String Arg_lati2 = "";
             String Arg_long2 = "";
-            if(IS_CONFIRMED.equals("1")) {
-                Techni_Firebase_ID = payload.getString(TECHNI_FIREBASE_ID);
-                Techni_User_ID = payload.getString(TECHNI_USER_ID);
-                Arg_lati2 = payload.getString(ARG_LATI2);
-                Arg_long2 = payload.getString(ARG_LONG2);
-            }
-
+            //if(Is_Confirmed.equals("1")) {
+                Techni_Firebase_ID = payload.getString(ARG_TECHNI_FIREBASE_ID);
+                Techni_User_ID = payload.getString(ARG_TECHNI_USER_ID);
+                Arg_lati2 = payload.getString(ARG_LATI2_TECHNI);
+                Arg_long2 = payload.getString(ARG_LONG2_TECHNI);
+            //}
             Log.e(TAG, "title: " + title);
             Log.e(TAG, "message: " + message);
             Log.e(TAG, "isBackground: " + isBackground);
@@ -129,39 +133,40 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             Log.e(TAG, "timestamp: " + timestamp);
             // payload specific
 
-            Log.e(TAG, ARG_PARAM_NAME + Name_key);
+            Log.e(TAG, ARG_CLIENT_PARAM_NAME + Client_Name_key);
+            Log.e(TAG, ARG_TECHNI_PARAM_NAME + Techni_Name_key);
             Log.e(TAG, ARG_ETA + ETA_key);
-            Log.e(TAG, ARG_PHONE + Arg_phone);
-            Log.e(TAG, ARG_LATI1 + Arg_lati1);
-            Log.e(TAG, ARG_LONG1 + Arg_long1);
-            Log.e(TAG, ARG_LATI2 + Arg_lati2);
-            Log.e(TAG, ARG_LONG2 + Arg_long2);
+            Log.e(TAG, ARG_PHONE + Phone);
+            Log.e(TAG, ARG_LATI1_CLIENT + Arg_lati1);
+            Log.e(TAG, ARG_LONG1_CLIENT + Arg_long1);
+            Log.e(TAG, ARG_LATI2_TECHNI + Arg_lati2);
+            Log.e(TAG, ARG_LONG2_TECHNI + Arg_long2);
 
             if (!NotificationUtils.isAppIsInBackground(getApplicationContext())) {
                 // app is in foreground, broadcast the push message
                 Intent pushNotification = new Intent(Config.PUSH_NOTIFICATION);
-
+                pushNotification.putExtra("title", title);
                 pushNotification.putExtra("message", message);
                 pushNotification.putExtra("image", imageUrl);
 
-                pushNotification.putExtra(ARG_PARAM_NAME , Name_key);
+                pushNotification.putExtra(ARG_CLIENT_PARAM_NAME , Client_Name_key);
+                pushNotification.putExtra(ARG_TECHNI_PARAM_NAME, Techni_Name_key);
                 pushNotification.putExtra(ARG_ETA , ETA_key);
-                pushNotification.putExtra(ARG_PHONE , Arg_phone);
-
+                pushNotification.putExtra(ARG_DISTANCE, Distance);
+                pushNotification.putExtra(ARG_PHONE, Phone);
                 // by default if is_confimed is null that means that the tecnifirebasae_ID will be zero
-                pushNotification.putExtra(IS_CONFIRMED, Is_Confirmed);
-                pushNotification.putExtra(CLIENT_FIREBASE_ID, Client_Firebase_ID);
-                pushNotification.putExtra(CLIENT_USER_ID, Client_User_ID);
-                pushNotification.putExtra(ARG_LATI1 , Arg_lati1);
-                pushNotification.putExtra(ARG_LONG1 , Arg_long1);
+                pushNotification.putExtra(ARG_IS_CONFIRMED, Is_Confirmed);
+                pushNotification.putExtra(ARG_CLIENT_FIREBASE_ID, Client_Firebase_ID);
+                pushNotification.putExtra(ARG_CLIENT_USER_ID, Client_User_ID);
+                pushNotification.putExtra(ARG_LATI1_CLIENT , Arg_lati1);
+                pushNotification.putExtra(ARG_LONG1_CLIENT , Arg_long1);
                 // argument on 2
-                pushNotification.putExtra(TECHNI_FIREBASE_ID, Techni_Firebase_ID);
-                pushNotification.putExtra(CLIENT_USER_ID, Techni_User_ID);
-                pushNotification.putExtra(ARG_LATI2 , Arg_lati2);
-                pushNotification.putExtra(ARG_LONG2 , Arg_long2);
+                pushNotification.putExtra(ARG_TECHNI_FIREBASE_ID, Techni_Firebase_ID);
+                pushNotification.putExtra(ARG_TECHNI_USER_ID, Techni_User_ID);
+                pushNotification.putExtra(ARG_LATI2_TECHNI , Arg_lati2);
+                pushNotification.putExtra(ARG_LONG2_TECHNI , Arg_long2);
 
                 LocalBroadcastManager.getInstance(this).sendBroadcast(pushNotification);
-
                 // play notification sound
                 NotificationUtils notificationUtils = new NotificationUtils(getApplicationContext());
                 notificationUtils.playNotificationSound();
@@ -171,13 +176,14 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 resultIntent.putExtra("message", message);
                 resultIntent.putExtra("image", imageUrl);
 
-                resultIntent.putExtra(ARG_PARAM_NAME , Name_key);
+                resultIntent.putExtra(ARG_CLIENT_PARAM_NAME , Client_Name_key);
+                resultIntent.putExtra(ARG_TECHNI_PARAM_NAME, Techni_Name_key);
                 resultIntent.putExtra(ARG_ETA , ETA_key);
-                resultIntent.putExtra(ARG_PHONE , Arg_phone);
-                resultIntent.putExtra(ARG_LATI1 , Arg_lati1);
-                resultIntent.putExtra(ARG_LONG1 , Arg_long1);
-                resultIntent.putExtra(ARG_LATI2 , Arg_lati2);
-                resultIntent.putExtra(ARG_LONG2 , Arg_long2);
+                resultIntent.putExtra(ARG_PHONE , Phone);
+                resultIntent.putExtra(ARG_LATI1_CLIENT , Arg_lati1);
+                resultIntent.putExtra(ARG_LONG1_CLIENT , Arg_long1);
+                resultIntent.putExtra(ARG_LATI2_TECHNI , Arg_lati2);
+                resultIntent.putExtra(ARG_LONG2_TECHNI , Arg_long2);
                 // check for image attachment
                 if (TextUtils.isEmpty(imageUrl)) {
                     showNotificationMessage(getApplicationContext(), title, message, timestamp, resultIntent);

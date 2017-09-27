@@ -44,8 +44,6 @@ import org.farmate.securifybeta.app.Config;
 import org.farmate.securifybeta.fragment.HomeFragment;
 import org.farmate.securifybeta.fragment.MonitorCarFragment;
 import org.farmate.securifybeta.fragment.MonitorTechFragment;
-import org.farmate.securifybeta.fragment.NotificationsFragment;
-
 import org.farmate.securifybeta.fragment.RequestTechFragment;
 import org.farmate.securifybeta.fragment.SettingsFragment;
 
@@ -65,9 +63,11 @@ import java.util.List;
 
 import static org.farmate.securifybeta.activity.LoginActivity.generalHTTPQuest;
 
+// sliding menu using navigation drawer
+// https://www.androidhive.info/2013/11/android-sliding-menu-using-navigation-drawer/
+
 public class StartActivity extends AppCompatActivity implements
         HomeFragment.OnFragmentInteractionListener,
-        NotificationsFragment.OnFragmentInteractionListener,
         MonitorTechFragment.OnFragmentInteractionListener,
         MonitorCarFragment.OnFragmentInteractionListener,
         RegisterCarFragment.OnFragmentInteractionListener,
@@ -97,7 +97,6 @@ public class StartActivity extends AppCompatActivity implements
 
     // tags used to attach the fragments
     private static final String TAG_HOME = "home";
-        private static final String TAG_NOTIFICATIONS = "notifications";
         private static final String TAG_MONITOR_TECH = "monitor tech";
         private static final String TAG_MONITOR_CAR = "monitor car";
         private static final String TAG_REGISTER_CAR = "register";
@@ -311,21 +310,17 @@ public class StartActivity extends AppCompatActivity implements
                 HomeFragment homeFragment = new HomeFragment();
                 return homeFragment;
             case 1:
-                // notification fragment
-                NotificationsFragment notificationsFragment = new NotificationsFragment();
-                return notificationsFragment;
-            case 2:
                 // monitor technician
                 MonitorTechFragment monitorTechFragment = new MonitorTechFragment();
                 return monitorTechFragment;
-            case 3:
+            case 2:
                 // monitor car
                 MonitorCarFragment monitorCarFragment = new MonitorCarFragment();
                 return monitorCarFragment;
-            case 4:
+            case 3:
                 RegisterCarFragment registerCarFragment = new RegisterCarFragment();
                 return registerCarFragment;
-            case 5:
+            case 4:
                 // settings fragment
                 SettingsFragment settingsFragment = new SettingsFragment();
                 return settingsFragment;
@@ -357,24 +352,20 @@ public class StartActivity extends AppCompatActivity implements
                         navItemIndex = 0;
                         CURRENT_TAG = TAG_HOME;
                         break;
-                    case R.id.nav_notifications:
-                        navItemIndex = 1;
-                        CURRENT_TAG = TAG_NOTIFICATIONS;
-                        break;
                     case R.id.nav_monitor_tech:
-                        navItemIndex = 2;
+                        navItemIndex = 1;
                         CURRENT_TAG = TAG_MONITOR_TECH;
                         break;
                     case R.id.nav_monitor_car:
-                        navItemIndex = 3;
+                        navItemIndex = 2;
                         CURRENT_TAG = TAG_MONITOR_CAR;
                         break;
                     case R.id.nav_register_car:
-                        navItemIndex = 4;
+                        navItemIndex = 3;
                         CURRENT_TAG = TAG_REGISTER_CAR;
                         break;
                     case R.id.nav_settings:
-                        navItemIndex = 5;
+                        navItemIndex = 4;
                         CURRENT_TAG = TAG_SETTINGS;
                         break;
                     case R.id.nav_logout:

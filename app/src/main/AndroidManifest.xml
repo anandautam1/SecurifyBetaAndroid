@@ -35,25 +35,30 @@
                 android:resource="@xml/provider_paths" />
         </provider>
 
-        <activity android:name=".activity.LoginActivity">
+        <activity android:name=".activity.LoginActivity"
+            android:screenOrientation="portrait">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity
             android:name=".activity.RegisterActivity"
-            android:parentActivityName=".activity.LoginActivity">
+            android:parentActivityName=".activity.LoginActivity"
+            android:screenOrientation="portrait">
 
             <!-- The meta-data tag is required if you support API level 15 and lower -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activity.LoginActivity" />
         </activity>
+
         <activity
             android:name=".activity.ResetPassActivity"
-            android:parentActivityName=".activity.LoginActivity">
+            android:parentActivityName=".activity.LoginActivity"
+            android:screenOrientation="portrait">
 
             <!-- The meta-data tag is required if you support API level 15 and lower -->
             <meta-data
@@ -61,10 +66,12 @@
                 android:value=".activity.LoginActivity" />
         </activity>
 
-        <!-- Start Activity (in this case shoudl have no action bar). -->
+        <!-- Start Activity (in this case rotation will be disabled. -->
         <activity
             android:name=".activity.StartActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar"
+            android:screenOrientation="portrait"/>
+
         <activity android:name=".activity.SearchCar" />
         <activity android:name=".activity.ImagePickActivity" />
         <activity android:name=".activity.MainActivity"></activity>

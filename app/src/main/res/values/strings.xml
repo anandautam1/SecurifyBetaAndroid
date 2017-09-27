@@ -59,8 +59,8 @@
     <!-- Toolbar titles when navigation menu item is selected -->
     <string-array name="nav_item_activity_titles">
         <item>Home</item>
-        <item>Monitor Tech Fragment</item>
-        <item>Monitor Car</item>
+        <item>Monitor Technicians</item>
+        <item>Monitor Cars</item>
         <item>Register Car</item>
         <item>Settings</item>
     </string-array>
