@@ -41,6 +41,7 @@ import com.google.firebase.messaging.FirebaseMessaging;
 
 import org.farmate.securifybeta.R;
 import org.farmate.securifybeta.app.Config;
+import org.farmate.securifybeta.database.securifyJobDatabaseHelper;
 import org.farmate.securifybeta.fragment.HomeFragment;
 import org.farmate.securifybeta.fragment.MonitorCarFragment;
 import org.farmate.securifybeta.fragment.MonitorTechFragment;
@@ -51,6 +52,7 @@ import org.farmate.securifybeta.fragment.SettingsFragment;
 import org.farmate.securifybeta.fragment.RegisterCarFragment;
 
 import org.farmate.securifybeta.fragment.dialogRequestFragment;
+import org.farmate.securifybeta.fragment.dialogRequestFragmentOffline;
 import org.farmate.securifybeta.other.CircleTransform;
 import org.farmate.securifybeta.database.usersLocal;
 import org.farmate.securifybeta.database.securifyUserDatabaseHelper;
@@ -72,7 +74,8 @@ public class StartActivity extends AppCompatActivity implements
         MonitorCarFragment.OnFragmentInteractionListener,
         RegisterCarFragment.OnFragmentInteractionListener,
         SettingsFragment.OnFragmentInteractionListener,
-        dialogRequestFragment.OnFragmentInteractionListener
+        dialogRequestFragment.OnFragmentInteractionListener,
+        dialogRequestFragmentOffline.OnFragmentInteractionListener
 {
         // new fragment for the next activity
         // get preferences based on the logged in database
@@ -115,6 +118,7 @@ public class StartActivity extends AppCompatActivity implements
         private static final int MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE = 3;
 
         private securifyUserDatabaseHelper db;
+        private securifyJobDatabaseHelper db2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -125,6 +129,8 @@ public class StartActivity extends AppCompatActivity implements
         // synchronize with the server
         StoreJSonDataInToSQLiteClass asyncTask = new StoreJSonDataInToSQLiteClass(getApplicationContext());
         asyncTask.execute(new String[] {getString(R.string.ServerURI)});
+
+        db2 = new securifyJobDatabaseHelper(getApplicationContext());
 
         setContentView(R.layout.activity_start);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -567,8 +573,12 @@ public class StartActivity extends AppCompatActivity implements
                 // inside fragment thus
                 if (result.equals("Database Synchronized")) {
 
-                    SharedPreferences sharedPref = getPreferences(Context.MODE_PRIVATE);
-                    //SharedPreferences sharedPref = getSharedPreferences(Context.MODE_PRIVATE);
+                    // initial version 3/10/2017 7:36PM
+                    // SharedPreferences sharedPref = getPreferences(Context.MODE_PRIVATE);
+                    // SharedPreferences sharedPref = getSharedPreferences(Context.MODE_PRIVATE);
+
+                    SharedPreferences sharedPref = getSharedPreferences("<Pref Name>", MODE_PRIVATE);
+
                     SharedPreferences.Editor editor = sharedPref.edit();
                     // get the email string passed to the start activity
                     Bundle bundleFromPrev = getIntent().getExtras();

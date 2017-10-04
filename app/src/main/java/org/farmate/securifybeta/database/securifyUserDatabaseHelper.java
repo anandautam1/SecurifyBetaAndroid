@@ -290,6 +290,7 @@ public class securifyUserDatabaseHelper extends SQLiteOpenHelper {
                 userLocal.setUserID(Integer.parseInt(cursor.getString(cursor.getColumnIndex(COLUMN_USERID))));
                 userLocal.setFname(cursor.getString(cursor.getColumnIndex(COLUMN_FNAME)));
                 userLocal.setLname(cursor.getString(cursor.getColumnIndex(COLUMN_LNAME)));
+                userLocal.setEmail(cursor.getString(cursor.getColumnIndex(COLUMN_EMAIL)));
                 userLocal.setPhone(cursor.getString(cursor.getColumnIndex(COLUMN_PHONE)));
                 userLocal.setPass_hashed(cursor.getString(cursor.getColumnIndex(COLUMN_PASS_HASHED)));
                 userLocal.setRole(cursor.getString(cursor.getColumnIndex(COLUMN_ROLE)));

@@ -33,46 +33,36 @@
 
                 <ImageView
                     android:id="@+id/ImageTakens"
-                    android:layout_width="263dp"
-                    android:layout_height="172dp"
+                    android:layout_width="394dp"
+                    android:layout_height="221dp"
                     android:padding="@dimen/ic_album_overflow_margin_top"
                     app:srcCompat="@android:drawable/ic_menu_gallery" />
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="0.54"
-                    android:orientation="vertical">
+            </LinearLayout>
 
-                    <android.support.design.widget.FloatingActionButton
-                        android:id="@+id/floatingTakePhoto"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:clickable="true"
-                        app:fabSize="mini"
-                        app:srcCompat="@android:drawable/ic_menu_camera" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="horizontal">
 
-                    <Space
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1" />
+                <Button
+                    android:id="@+id/photoButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Take Photo" />
 
-                    <android.support.design.widget.FloatingActionButton
-                        android:id="@+id/floatingUploadPhoto"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:clickable="true"
-                        app:fabSize="mini"
-                        app:srcCompat="@android:drawable/ic_menu_upload" />
-
-                </LinearLayout>
-
+                <Button
+                    android:id="@+id/galleryButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="From Album" />
             </LinearLayout>
 
             <TextView
-                android:id="@+id/carNickName"
+                android:id="@+id/jobNickName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignBottom="@+id/loginButton"
@@ -85,7 +75,7 @@
                 tools:layout_editor_absoluteY="109dp" />
 
             <EditText
-                android:id="@+id/inputCarNickName"
+                android:id="@+id/inputJobNickName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -137,7 +127,7 @@
                 android:layout_alignParentStart="true"
                 android:layout_weight="1"
                 android:hint="@string/LoginActivity_login"
-                android:text="@string/TimeLastServiced"
+                android:text="Time Last Serviced"
                 tools:layout_editor_absoluteX="208dp"
                 tools:layout_editor_absoluteY="109dp" />
 
@@ -147,7 +137,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:ems="10"
-                android:hint="@string/TimeLastServiced"
+                android:hint="Input Date"
                 android:inputType="date"
                 android:textColorHint="@color/colorPrimary" />
 
@@ -167,7 +157,7 @@
                 android:inputType="textMultiLine" />
 
             <Button
-                android:id="@+id/registerCarButton"
+                android:id="@+id/registerJobButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"

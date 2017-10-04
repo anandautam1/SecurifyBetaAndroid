@@ -96,6 +96,7 @@ public class RequestTechFragment extends Fragment {
         recyclerView = (RecyclerView) inflatedView.findViewById(R.id.recycler_view);
 
         albumList = new ArrayList<>();
+        /*
         adapter = new AlbumsAdapter(getActivity().getApplicationContext(), albumList);
         // declare activity to fragment interaction
         RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(getActivity().getApplicationContext(), 2);
@@ -103,8 +104,9 @@ public class RequestTechFragment extends Fragment {
         recyclerView.addItemDecoration(new GridSpacingItemDecoration(2, dpToPx(10), true));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(adapter);
+        */
 
-        prepareAlbums();
+        //prepareAlbums();
         return inflatedView;
     }
 

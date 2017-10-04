@@ -4,7 +4,9 @@ import android.Manifest;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.icu.util.Calendar;
@@ -13,6 +15,7 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.FloatingActionButton;
@@ -31,16 +34,26 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import org.farmate.securifybeta.R;
+import org.farmate.securifybeta.database.jobsLocal;
+import org.farmate.securifybeta.database.securifyJobDatabaseHelper;
+import org.farmate.securifybeta.database.securifyUserDatabaseHelper;
+import org.farmate.securifybeta.database.usersLocal;
+import org.farmate.securifybeta.util.RealPathUtil;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 import static android.app.Activity.RESULT_OK;
+import static android.content.Context.MODE_PRIVATE;
 import static org.farmate.securifybeta.activity.LoginActivity.generalHTTPQuest;
 
 /**
@@ -106,10 +119,10 @@ public class RegisterCarFragment extends Fragment {
     private static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 1888;
 
     public static final String CAPTUREPICTURE_MESSAGE = "org.farmate.securify.CapturePIC";
-    private FloatingActionButton TakePhoto;
-    private FloatingActionButton UploadPhoto;
+    private Button TakePhoto;
+    private Button GalleryPhoto;
     private ImageView CarPhoto;
-    private Button RegisterCarButton;
+    private Button RegisterJobButton;
     private static final int ACTIVITY_START_CAMERA_APP = 1;
     // custom permission vector
     private static final int MY_PERMISSIONS_REQUEST_CAMERA = 1;
@@ -117,77 +130,122 @@ public class RegisterCarFragment extends Fragment {
     private static final String FRAGMENT_TAG = "org.farmate.securifybeta";
 
     // Form Elements
-    private EditText carNickNameInput;
+    private EditText jobNickNameInput;
     private EditText registrationNumberInput;
     private EditText lastServiceInput;
     private EditText descriptionInput;
 
-    private String carNickNameString;
+    private String jobNickNameString;
     private String registrationNumberString;
     private String lastServiceString;
     private String descriptionString;
 
+    /*
     Calendar myCalendar = Calendar.getInstance();
     String dateFormat = "dd.MM.yyyy";
     DatePickerDialog.OnDateSetListener date;
     SimpleDateFormat sdf = new SimpleDateFormat(dateFormat, Locale.GERMAN);
+    */
+
+    private SharedPreferences sharedPref;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         this.inflatedView = inflater.inflate(R.layout.fragment_register_car, container, false);
-        TakePhoto = (FloatingActionButton) inflatedView.findViewById(R.id.floatingTakePhoto);
-        UploadPhoto = (FloatingActionButton) inflatedView.findViewById(R.id.floatingUploadPhoto);
+        TakePhoto = (Button) inflatedView.findViewById(R.id.photoButton);
+        GalleryPhoto = (Button) inflatedView.findViewById(R.id.galleryButton);
         CarPhoto = (ImageView) inflatedView.findViewById(R.id.ImageTakens);
-        RegisterCarButton = (Button) inflatedView.findViewById((R.id.registerCarButton));
+        RegisterJobButton = (Button) inflatedView.findViewById((R.id.registerJobButton));
 
         // form elements
-        carNickNameInput = (EditText) inflatedView.findViewById((R.id.inputCarNickName));
+        jobNickNameInput = (EditText) inflatedView.findViewById((R.id.inputJobNickName));
         registrationNumberInput = (EditText) inflatedView.findViewById((R.id.inputRegistrationNumber));
 
         lastServiceInput = (EditText) inflatedView.findViewById((R.id.inputLastService));
-        // disable keyboard input
-        if (Build.VERSION.SDK_INT >= 11)
-        {
-            lastServiceInput.setRawInputType(InputType.TYPE_CLASS_TEXT);
-            lastServiceInput.setTextIsSelectable(true);
-        }
-        else{
-            lastServiceInput.setRawInputType(InputType.TYPE_NULL);
-            lastServiceInput.setFocusable(true);
-        }
-        // init - set date to current date
-        long currentdate = System.currentTimeMillis();
-        String dateString = sdf.format(currentdate);
-        lastServiceInput.setText(dateString);
-        date = new DatePickerDialog.OnDateSetListener() {
-            @Override
-            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth)
+
+
+        if(Build.VERSION.SDK_INT >= 24) {
+
+            // disable keyboard input
+            if (Build.VERSION.SDK_INT >= 11)
             {
-                // TODO Auto-generated method stub
-                myCalendar.set(Calendar.YEAR, year);
-                myCalendar.set(Calendar.MONTH, monthOfYear);
-                myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-                lastServiceInput.setText(sdf.format(myCalendar.getTime()));
+                lastServiceInput.setRawInputType(InputType.TYPE_CLASS_TEXT);
+                lastServiceInput.setTextIsSelectable(true);
             }
-        };
+            else{
+                lastServiceInput.setRawInputType(InputType.TYPE_NULL);
+                lastServiceInput.setFocusable(true);
+            }
 
+            final Calendar myCalendar = Calendar.getInstance();
+            String dateFormat = "dd.MM.yyyy";
+            final DatePickerDialog.OnDateSetListener date;
+            final SimpleDateFormat sdf = new SimpleDateFormat(dateFormat, Locale.GERMAN);
 
-        lastServiceInput.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                {
+            // init - set date to current date
+            long currentdate = System.currentTimeMillis();
+            String dateString = sdf.format(currentdate);
+            lastServiceInput.setText(dateString);
+            date = new DatePickerDialog.OnDateSetListener() {
+                @Override
+                public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
                     // TODO Auto-generated method stub
-                    new DatePickerDialog(getActivity(), date, myCalendar
-                            .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
-                            myCalendar.get(Calendar.DAY_OF_MONTH)).show();
+                    myCalendar.set(Calendar.YEAR, year);
+                    myCalendar.set(Calendar.MONTH, monthOfYear);
+                    myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                    lastServiceInput.setText(sdf.format(myCalendar.getTime()));
                 }
-            }
-        });
+            };
+
+            lastServiceInput.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    {
+                        // TODO Auto-generated method stub
+                        new DatePickerDialog(getActivity(), date, myCalendar
+                                .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
+                                myCalendar.get(Calendar.DAY_OF_MONTH)).show();
+                    }
+                }
+            });
+        }
 
         descriptionInput = (EditText) inflatedView.findViewById((R.id.inputDescription));
 
+        GalleryPhoto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // Check permission for CAMERA
+                if(Build.VERSION.SDK_INT >= 23) {
+                    if ((ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED)) {
+                        // Check Permissions Now
+                        // Callback onRequestPermissionsResult interceptado na Activity MainActivity
+                        ActivityCompat.requestPermissions(getActivity(),
+                                new String[]{Manifest.permission.CAMERA},
+                                MY_PERMISSIONS_REQUEST_CAMERA);
+                    }
+                    // Check permission for Internal Storage
+                    if ((ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED)) {
+                        ActivityCompat.requestPermissions(getActivity(),
+                                new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                                MY_PERMISSIONS_REQUEST_W_EXTERNAL_STORAGE);
+                    }
+                    else
+                    {
+                        startGallery();
+                    }
+                }
+                else
+                {
+                    startGallery();
+                }
+
+            }
+        });
+
+        // set on click listener for the camera button
         TakePhoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -219,20 +277,57 @@ public class RegisterCarFragment extends Fragment {
             }
         });
 
-        RegisterCarButton.setOnClickListener(new View.OnClickListener() {
+        RegisterJobButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     // check validity of an input
                     // data sanitation on the rego
                     // execute async http request to register the client
-                    carNickNameString = carNickNameInput.getText().toString();
-                    registrationNumberString = registrationNumberInput.getText().toString();
-                    lastServiceString = lastServiceInput.getText().toString();
-                    descriptionString = descriptionInput.getText().toString();
+                    if(mCurrentPhotoPath != null) {
+                        jobNickNameString = jobNickNameInput.getText().toString();
+                        registrationNumberString = registrationNumberInput.getText().toString();
+                        lastServiceString = lastServiceInput.getText().toString();
+                        descriptionString = descriptionInput.getText().toString();
 
-                    RegisterCarFragment.RegisterCarRequest asyncTask = new RegisterCarFragment.RegisterCarRequest();
-                    //get all the fields for the form
-                    asyncTask.execute(new String[] {getString(R.string.ServerURI)});
+                        if (getActivity() != null) {
+                            //sharedPref = getActivity().getPreferences(Context.MODE_PRIVATE);
+                            sharedPref = getActivity().getSharedPreferences("<Pref Name>", MODE_PRIVATE);
+                            int userID = Integer.valueOf(sharedPref.getString(getString(R.string.userIdLoggedIn), ""));
+                            securifyUserDatabaseHelper db = new securifyUserDatabaseHelper(getActivity());
+                            List<usersLocal> UserList = db.getUserOnUserID(userID);
+                            usersLocal ChosenUser = new usersLocal();
+                            for (int i = 0; i < UserList.size(); i++) {
+                                ChosenUser = UserList.get(i);
+                            }
+                            jobsLocal jobsLocal = new jobsLocal();
+                            // get the image uri
+                            jobsLocal.setUserID(userID);
+                            jobsLocal.setJobNickName(jobNickNameString);
+                            jobsLocal.setRegistrationNumberString(registrationNumberString);
+                            jobsLocal.setEmail(ChosenUser.getEmail());
+                            jobsLocal.setPhone(ChosenUser.getPhone());
+                            jobsLocal.setImage_uri(mCurrentPhotoPath);
+                            jobsLocal.setRole(ChosenUser.getRole());
+                            jobsLocal.setGps_long(ChosenUser.getGps_lati());
+                            jobsLocal.setGps_lati(ChosenUser.getGps_long());
+                            jobsLocal.setLastServiced(lastServiceString);
+                            String mydate;
+                            if(Build.VERSION.SDK_INT >= 24) {
+                                mydate = java.text.DateFormat.getDateTimeInstance().format(Calendar.getInstance().getTime());
+                            }
+                            else
+                            {
+                                mydate = "06/04/1995";
+                            }
+                            jobsLocal.setLastUpdated(mydate);
+                            securifyJobDatabaseHelper db2 = new securifyJobDatabaseHelper(getActivity());
+                            db2.addJob(jobsLocal);
+                            Toast.makeText(getActivity(), "Picture Added To The Database", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                    else{
+                        Toast.makeText(getActivity(), "Picture Not Taken", Toast.LENGTH_SHORT).show();
+                    }
                 }
         });
 
@@ -240,6 +335,7 @@ public class RegisterCarFragment extends Fragment {
     }
 
     static final int REQUEST_IMAGE_CAPTURE = 1;
+    static final int RESULT_LOAD_IMAGE = 2;
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
@@ -252,6 +348,28 @@ public class RegisterCarFragment extends Fragment {
             try {
                 Bitmap imageBitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), contentUri);
                 CarPhoto.setImageBitmap(imageBitmap);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        else if (requestCode == RESULT_LOAD_IMAGE && resultCode == RESULT_OK && data != null && data.getData() != null) {
+            try{
+                final Uri imageUri = data.getData();
+                // SDK < API11
+                if (Build.VERSION.SDK_INT < 11) {
+                    mCurrentPhotoPath = RealPathUtil.getRealPathFromURI_BelowAPI11(getActivity(), data.getData());
+                }
+                    // SDK >= 11 && SDK < 19
+                else if (Build.VERSION.SDK_INT < 19) {
+                    mCurrentPhotoPath = RealPathUtil.getRealPathFromURI_API11to18(getActivity(), data.getData());
+                }
+                    // SDK > 19 (Android 4.4)
+                else {
+                    mCurrentPhotoPath = RealPathUtil.getRealPathFromURI_API19(getActivity(), data.getData());
+                }
+                final InputStream imageStream = getActivity().getContentResolver().openInputStream(imageUri);
+                final Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
+                CarPhoto.setImageBitmap(selectedImage);
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -350,63 +468,37 @@ public class RegisterCarFragment extends Fragment {
         void onFragmentInteraction(Uri uri);
     }
 
-    public void startCamera()
+    private File photoFile;
+    private void startCamera()
     {
         // permission has been granted, continue as usual
         Intent callCameraApplicationIntent = new Intent();
         callCameraApplicationIntent.setAction(MediaStore.ACTION_IMAGE_CAPTURE);
         if (callCameraApplicationIntent.resolveActivity(getActivity().getPackageManager()) != null) {
-            File photoFile = null;
+            this.photoFile = null;
             try {
                 photoFile = createImageFile();
 
+                String authorities = getActivity().getApplicationContext().getPackageName() + ".fileprovider";
+
+                Uri imageUri = FileProvider.getUriForFile(getActivity(), authorities, photoFile);
+
+                callCameraApplicationIntent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
+
+                startActivityForResult(callCameraApplicationIntent, ACTIVITY_START_CAMERA_APP);
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            String authorities = getActivity().getApplicationContext().getPackageName() + ".fileprovider";
-            Uri imageUri = FileProvider.getUriForFile(getActivity(), authorities, photoFile);
-            callCameraApplicationIntent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
 
-            startActivityForResult(callCameraApplicationIntent, ACTIVITY_START_CAMERA_APP);
         }
     }
 
-    // Async syntax AsyncTask <TypeOfVarArgParams, ProgressValue, ResultValue>
-    private class RegisterCarRequest extends AsyncTask<String, Void, String> {
-        @Override
-        protected String doInBackground(String... urls) {
-            // we use the OkHttp library from https://github.com/square/okhttp
-            final String uri_target = new String(getString(R.string.ServerURI));
-            final String page_target_salt = new String("carRegister.php?");
-            // get password salt first generate 7 long random char
-
-            // uri request builder
-            Uri buildUrSalt = Uri.parse(uri_target + page_target_salt)
-                    .buildUpon()
-                    .appendQueryParameter("carNickName", carNickNameString)
-                    .appendQueryParameter("registrationNumber", registrationNumberString)
-                    .appendQueryParameter("lastService", lastServiceString)
-                    .appendQueryParameter("description", descriptionString)
-                    .build();
-            String result = generalHTTPQuest(buildUrSalt.toString());
-            int status_result = -1;
-            try {
-                JSONObject reader = new JSONObject(result);
-                status_result = reader.getInt("success");
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-            if (status_result == -1) {
-                return "Cannot Connect To The Server";
-            } else if (status_result == 0) {
-                return "Cannot Register";
-            } else if (status_result == 1) {
-                return "Registration Success";
-            }
-            return "";
-        }
-
+    private void startGallery()
+    {
+        Intent galleryIntent = new Intent();
+        galleryIntent.setType("image/*");
+        galleryIntent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(Intent.createChooser(galleryIntent, "Select Picture"), RESULT_LOAD_IMAGE);
     }
-
 }
 

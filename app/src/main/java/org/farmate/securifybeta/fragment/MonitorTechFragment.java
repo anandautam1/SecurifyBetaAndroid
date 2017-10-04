@@ -23,6 +23,7 @@ import android.widget.ImageView;
 import com.bumptech.glide.Glide;
 
 import org.farmate.securifybeta.R;
+import org.farmate.securifybeta.database.securifyUserDatabaseHelper;
 import org.farmate.securifybeta.other.Album;
 import org.farmate.securifybeta.other.AlbumsAdapter;
 
@@ -77,6 +78,9 @@ public class MonitorTechFragment extends Fragment {
         return fragment;
     }
 
+    // get the latest database synchronization
+    private securifyUserDatabaseHelper db;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -96,6 +100,7 @@ public class MonitorTechFragment extends Fragment {
         recyclerView = (RecyclerView) inflatedView.findViewById(R.id.recycler_view);
 
         albumList = new ArrayList<>();
+        /*
         adapter = new AlbumsAdapter(getActivity().getApplicationContext(), albumList);
         // declare activity to fragment interaction
         RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(getActivity().getApplicationContext(), 2);
@@ -105,6 +110,7 @@ public class MonitorTechFragment extends Fragment {
         recyclerView.setAdapter(adapter);
 
         prepareAlbums();
+        */
         return inflatedView;
     }
 

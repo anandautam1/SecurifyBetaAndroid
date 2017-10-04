@@ -212,9 +212,7 @@ public class ImagePickActivity extends AppCompatActivity {
 
                 OutPutStream = httpURLConnectionObject.getOutputStream();
 
-                bufferedWriterObject = new BufferedWriter(
-
-                        new OutputStreamWriter(OutPutStream, "UTF-8"));
+                bufferedWriterObject = new BufferedWriter(new OutputStreamWriter(OutPutStream, "UTF-8"));
 
                 bufferedWriterObject.write(bufferedWriterDataFN(PData));
 

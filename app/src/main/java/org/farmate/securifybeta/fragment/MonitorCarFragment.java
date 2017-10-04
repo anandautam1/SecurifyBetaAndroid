@@ -3,7 +3,11 @@ package org.farmate.securifybeta.fragment;
 
 import android.content.Context;
 import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Rect;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
@@ -23,9 +27,16 @@ import android.widget.ImageView;
 import com.bumptech.glide.Glide;
 
 import org.farmate.securifybeta.R;
+import org.farmate.securifybeta.database.jobsLocal;
+import org.farmate.securifybeta.database.securifyJobDatabaseHelper;
 import org.farmate.securifybeta.other.Album;
 import org.farmate.securifybeta.other.AlbumsAdapter;
+import org.farmate.securifybeta.other.JobsAdapter;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -48,8 +59,10 @@ public class MonitorCarFragment extends Fragment {
     private String mParam2;
 
     private RecyclerView recyclerView;
-    private AlbumsAdapter adapter;
+    private JobsAdapter adapter;
     private List<Album> albumList;
+
+    private List<jobsLocal> jobsList;
 
     private View inflatedView;
 
@@ -92,100 +105,25 @@ public class MonitorCarFragment extends Fragment {
         // Inflate the layout for this fragment
         this.inflatedView = inflater.inflate(R.layout.fragment_monitor_car, container, false);
 
-        initCollapsingToolbar();
         recyclerView = (RecyclerView) inflatedView.findViewById(R.id.recycler_view);
 
         albumList = new ArrayList<>();
-        adapter = new AlbumsAdapter(getActivity().getApplicationContext(), albumList);
+
+        jobsList = new ArrayList<>();
+        securifyJobDatabaseHelper db2 = new securifyJobDatabaseHelper(getActivity());
+        jobsList = db2.getAllJob();
+
+        // check on the constructor of this view
+        adapter = new JobsAdapter(getActivity(),getActivity().getApplicationContext(), jobsList);
         // declare activity to fragment interaction
-        RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(getActivity().getApplicationContext(), 2);
+        RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(getActivity().getApplicationContext(), 1);
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.addItemDecoration(new GridSpacingItemDecoration(2, dpToPx(10), true));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(adapter);
 
-        prepareAlbums();
+        //prepareAlbums();
         return inflatedView;
-    }
-
-    private void initCollapsingToolbar() {
-
-        final CollapsingToolbarLayout collapsingToolbar =
-                (CollapsingToolbarLayout) inflatedView.findViewById(R.id.collapsing_toolbar);
-        collapsingToolbar.setTitle(" ");
-        AppBarLayout appBarLayout = (AppBarLayout) inflatedView.findViewById(R.id.appbar);
-        appBarLayout.setExpanded(true);
-
-        // hiding & showing the title when toolbar expanded & collapsed
-        appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
-            boolean isShow = false;
-            int scrollRange = -1;
-
-            @Override
-            public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
-                if (scrollRange == -1) {
-                    scrollRange = appBarLayout.getTotalScrollRange();
-                }
-                if (scrollRange + verticalOffset == 0) {
-                    collapsingToolbar.setTitle(getString(R.string.app_name));
-                    isShow = true;
-                } else if (isShow) {
-                    collapsingToolbar.setTitle(" ");
-                    isShow = false;
-                }
-            }
-        });
-
-    }
-
-    // modify to retrieve the list of cars axtuall in the databse
-    private void prepareAlbums() {
-
-        int[] covers = new int[]{
-                R.drawable.album1,
-                R.drawable.album2,
-                R.drawable.album3,
-                R.drawable.album4,
-                R.drawable.album5,
-                R.drawable.album6,
-                R.drawable.album7,
-                R.drawable.album8,
-                R.drawable.album9,
-                R.drawable.album10,
-                R.drawable.album11};
-
-        // change to the name of the technician
-        Album a = new Album("True Romance", 13, covers[0]);
-        albumList.add(a);
-
-        a = new Album("Xscape", 8, covers[1]);
-        albumList.add(a);
-
-        a = new Album("Maroon 5", 11, covers[2]);
-        albumList.add(a);
-
-        a = new Album("Born to Die", 12, covers[3]);
-        albumList.add(a);
-
-        a = new Album("Honeymoon", 14, covers[4]);
-        albumList.add(a);
-
-        a = new Album("I Need a Doctor", 1, covers[5]);
-        albumList.add(a);
-
-        a = new Album("Loud", 11, covers[6]);
-        albumList.add(a);
-
-        a = new Album("Legend", 14, covers[7]);
-        albumList.add(a);
-
-        a = new Album("Hello", 11, covers[8]);
-        albumList.add(a);
-
-        a = new Album("Greatest Hits", 17, covers[9]);
-        albumList.add(a);
-
-        adapter.notifyDataSetChanged();
     }
 
     /**
@@ -265,4 +203,13 @@ public class MonitorCarFragment extends Fragment {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
+
+    public void refreshFragment(){
+        if(getActivity() != null)
+        {
+            getActivity().getSupportFragmentManager().beginTransaction().detach(this).commitAllowingStateLoss();
+            getActivity().getSupportFragmentManager().beginTransaction().attach(this).commitAllowingStateLoss();
+        }
+    }
+
 }

@@ -47,8 +47,8 @@
     <string name="nav_home">Home</string>
     <string name="nav_notifications">Notifications</string>
     <string name="nav_monitor_tech">Monitor Technician</string>
-    <string name="nav_monitor_car">Monitor Car</string>
-    <string name="nav_register_car">Register Car</string>
+    <string name="nav_monitor_car">Monitor Job</string>
+    <string name="nav_register_car">Register Job</string>
     <string name="nav_settings">Settings</string>
     <string name="nav_reset_pass">Reset Password</string>
     <string name="nav_logout">Logout</string>
@@ -60,8 +60,8 @@
     <string-array name="nav_item_activity_titles">
         <item>Home</item>
         <item>Monitor Technicians</item>
-        <item>Monitor Cars</item>
-        <item>Register Car</item>
+        <item>Monitor Job</item>
+        <item>Report Job</item>
         <item>Settings</item>
     </string-array>
 
@@ -76,10 +76,10 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
     <!-- Register Car Specific -->
-    <string name="CarPromptPhoto">Take Photo Of The Car</string>
-    <string name="CarNickName">Car Nick Name</string>
+    <string name="CarPromptPhoto">Take Photo Of The Job</string>
+    <string name="CarNickName">Job Nick Name</string>
     <string name="RegistrationPlate">Registration Plate</string>
-    <string name="TimeLastServiced">Time Last Serviced</string>
+    <string name="TimeLastServiced">Estimated Repair Value</string>
     <string name="Description">Description</string>
 
     <!-- Take Picture Specific -->

@@ -5,6 +5,8 @@ package org.farmate.securifybeta.other;
  */
 
 import android.content.Context;
+import android.content.DialogInterface;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -21,7 +23,7 @@ import com.bumptech.glide.Glide;
 
 import org.farmate.securifybeta.R;
 import org.farmate.securifybeta.database.jobsLocal;
-import org.w3c.dom.Text;
+import org.farmate.securifybeta.database.securifyJobDatabaseHelper;
 
 import java.io.File;
 import java.util.List;
@@ -31,9 +33,10 @@ import java.util.List;
  * edited Ananda Utama
  * https://www.androidhive.info/2016/05/android-working-with-card-view-and-recycler-view/
  */
-public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.MyViewHolder> {
+public class JobsAdapter extends RecyclerView.Adapter<JobsAdapter.MyViewHolder> {
 
     private Context mContext;
+    private Context ActivityContext;
     private List<jobsLocal> jobsLocalList;
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
@@ -59,7 +62,8 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.MyViewHold
         }
     }
 
-    public AlbumsAdapter(Context mContext, List<jobsLocal> jobsLocalList) {
+    public JobsAdapter(Context activityContext, Context mContext, List<jobsLocal> jobsLocalList) {
+        this.ActivityContext = activityContext;
         this.mContext = mContext;
         this.jobsLocalList = jobsLocalList;
     }
@@ -68,23 +72,16 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.MyViewHold
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.album_card, parent, false);
-
         return new MyViewHolder(itemView);
     }
 
     @Override
-    public void onBindViewHolder(final MyViewHolder holder, int position) {
+    public void onBindViewHolder(final MyViewHolder holder, final int position) {
         jobsLocal jobs = jobsLocalList.get(position);
         holder.jobID.setText(String.valueOf(jobs.getJobID()));
         holder.jobNickNameString.setText(jobs.getJobNickName());
         holder.registrationNumberString.setText(jobs.getRegistrationNumberString());
         holder.lastupdatedString.setText(jobs.getLastUpdated());
-
-        /*
-        sendButton = (Button) view.findViewById(R.id.buttonAcceptRequest);
-        detailsButton = (Button) view.findViewById(R.id.buttonDeclineRequest);
-        deleteButton = (Button) view.findViewById(R.id.buttonDeleteRequest);
-        */
 
         // loading album cover using Glide library
         Glide.with(mContext).load(new File(jobs.getImage_uri())).into(holder.thumbnail);
@@ -100,15 +97,67 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.MyViewHold
             @Override
             public void onClick(View view) {
                 Toast.makeText(mContext, "Opening Details", Toast.LENGTH_SHORT).show();
+
             }
         });
 
+        // a prompt will be good but did not have time to execute the database
         holder.deleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Toast.makeText(mContext, "Deleting Database", Toast.LENGTH_SHORT).show();
+
+                /*
+                securifyJobDatabaseHelper db2 = new securifyJobDatabaseHelper(ActivityContext);
+                List<jobsLocal> JobList = db2.getJobOnJobID(Integer.valueOf(holder.jobID.getText().toString()));
+                jobsLocal ChosenJobs = new jobsLocal();
+                for (int i = 0; i < JobList.size(); i++) {
+                    ChosenJobs = JobList.get(i);
+                }
+                db2.deleteUser(ChosenJobs);
+                Toast.makeText(mContext, "Delete Successful", Toast.LENGTH_SHORT).show();
+                // reload the fragment
+                reloadDatabase();
+                */
+
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(ActivityContext);
+                builder.setMessage("Are you sure you want to delete?")
+                        .setCancelable(false)
+                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                securifyJobDatabaseHelper db2 = new securifyJobDatabaseHelper(ActivityContext);
+                                List<jobsLocal> JobList = db2.getJobOnJobID(Integer.valueOf(holder.jobID.getText().toString()));
+                                jobsLocal ChosenJobs = new jobsLocal();
+                                for (int i = 0; i < JobList.size(); i++) {
+                                    ChosenJobs = JobList.get(i);
+                                }
+                                db2.deleteUser(ChosenJobs);
+                                Toast.makeText(mContext, "Delete Successful", Toast.LENGTH_SHORT).show();
+                                // reload the fragment
+                                reloadDatabase();
+
+                                dialog.dismiss();
+                            }
+                        })
+                        .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.cancel();
+                            }
+                        });
+                AlertDialog alert = builder.create();
+                alert.show();
+
             }
         });
+    }
+
+    private void reloadDatabase()
+    {
+        securifyJobDatabaseHelper db2 = new securifyJobDatabaseHelper(ActivityContext);
+        List<jobsLocal> JobList = db2.getAllJob();
+        jobsLocalList = JobList;
+        notifyDataSetChanged();
     }
 
     /**
